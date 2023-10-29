@@ -17,9 +17,9 @@ class SearchInput extends Component<SearchInputProps, SearchInputState> {
   }
 
   componentDidMount(): void {
-    const savedSearchTerm = localStorage.getItem("searchString");
-    if (savedSearchTerm) {
-      this.setState({ searchString: savedSearchTerm });
+    const savedSearchString = localStorage.getItem("searchString");
+    if (savedSearchString) {
+      this.setState({ searchString: savedSearchString });
     }
   }
 
@@ -29,10 +29,9 @@ class SearchInput extends Component<SearchInputProps, SearchInputState> {
 
   handleSearch = (): void => {
     const { searchString } = this.state;
+
     this.props.onSearch(searchString);
     localStorage.setItem("searchString", searchString);
-
-    this.setState({ searchString: "" });
   };
 
   render(): ReactElement {
@@ -40,9 +39,17 @@ class SearchInput extends Component<SearchInputProps, SearchInputState> {
 
     return (
       <div className="search">
-        <input type="text" value={searchString} placeholder="Search Pokemon" onChange={this.handleInputChange} />
+        <input
+          className="search__input"
+          type="text"
+          value={searchString}
+          placeholder="Search Pokemon"
+          onChange={this.handleInputChange}
+        />
 
-        <button onClick={this.handleSearch}>Search</button>
+        <button className="search__button" onClick={this.handleSearch}>
+          Search
+        </button>
       </div>
     );
   }
