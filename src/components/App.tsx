@@ -5,7 +5,8 @@ import { IPokemonData, IPokemonBasicData } from "../types/types";
 
 interface AppState {
   searchResults: IPokemonData[];
-  error: string | null;
+  isLoading: boolean;
+  error: string;
 }
 
 class App extends Component<Record<string, never>, AppState> {
@@ -13,8 +14,14 @@ class App extends Component<Record<string, never>, AppState> {
     super(props);
     this.state = {
       searchResults: [],
-      error: null,
+      isLoading: false,
+      error: "",
     };
+  }
+
+  componentDidMount(): void {
+    const savedSearchString = localStorage.getItem("searchString") || "";
+    this.fetchResults(savedSearchString);
   }
 
   async getPokemon(searchString: string): Promise<IPokemonData> {
@@ -32,11 +39,6 @@ class App extends Component<Record<string, never>, AppState> {
     };
   }
 
-  componentDidMount(): void {
-    const savedSearchString = localStorage.getItem("searchString") || "";
-    this.fetchResults(savedSearchString);
-  }
-
   async getAllPokemons(dataArray: IPokemonBasicData[]): Promise<IPokemonData[]> {
     const pokemonDataPromises = dataArray.map(async (data) => {
       const response = await this.getPokemon(data.name);
@@ -48,12 +50,20 @@ class App extends Component<Record<string, never>, AppState> {
   }
 
   async fetchResults(searchString: string): Promise<void> {
+    this.setState({ isLoading: true });
+    this.setState({ error: "" });
+
     const URL = searchString
       ? `https://pokeapi.co/api/v2/pokemon/${searchString}`
-      : "https://pokeapi.co/api/v2/pokemon?limit=600";
+      : "https://pokeapi.co/api/v2/pokemon?limit=300";
 
     try {
       const response = await fetch(URL);
+
+      if (!response.ok) {
+        throw Error("Pokemon not found. Try another one!");
+      }
+
       const data = await response.json();
 
       if (searchString) {
@@ -64,7 +74,12 @@ class App extends Component<Record<string, never>, AppState> {
         this.setState({ searchResults: pokemonData });
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) {
+        console.log(error.message);
+        this.setState({ error: error.message });
+      }
+    } finally {
+      this.setState({ isLoading: false });
     }
   }
 
@@ -73,32 +88,56 @@ class App extends Component<Record<string, never>, AppState> {
   };
 
   handleThrowError = (): void => {
-    throw new Error("Test error");
+    try {
+      throw new Error("Test error is thrown!");
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+        this.setState({ error: error.message });
+      }
+    }
   };
 
   render(): ReactElement {
     const { searchResults } = this.state;
 
-    // if (error) {
-    //   return (
-    //     <div>
-    //       <h1>Error occurred</h1>
-    //       <button onClick={this.handleThrowError}>Throw Error</button>
-    //     </div>
-    //   );
-    // }
-
     return (
       <div className="page">
-        <SearchInput onSearch={this.handleSearch} />
+        <span className="note">The total number of Pokémon is limited to 300 due to practical considerations.</span>
 
-        <div className="results">
-          {searchResults.length > 0 &&
-            searchResults.map((data) => (
-              <ResultItem key={data.id} name={data.name} height={data.height} weight={data.weight} image={data.image} />
-            ))}
-        </div>
-        {/* <button onClick={this.handleThrowError}>Throw Error</button> */}
+        <header className="header">
+          <SearchInput onSearch={this.handleSearch} isLoading={this.state.isLoading} />
+          <button className="button button__error" disabled={this.state.isLoading} onClick={this.handleThrowError}>
+            Throw Error ⚡️
+          </button>
+        </header>
+
+        {this.state.error && (
+          <div className="message">
+            <span className="message__error">{this.state.error}</span>
+          </div>
+        )}
+
+        {this.state.isLoading && (
+          <div className="message">
+            <span className="message__loading">Loading...</span>
+          </div>
+        )}
+
+        {!this.state.error && !this.state.isLoading && (
+          <div className="results">
+            {searchResults.length > 0 &&
+              searchResults.map((data) => (
+                <ResultItem
+                  key={data.id}
+                  name={data.name}
+                  height={data.height}
+                  weight={data.weight}
+                  image={data.image}
+                />
+              ))}
+          </div>
+        )}
       </div>
     );
   }

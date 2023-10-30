@@ -2,6 +2,7 @@ import { ChangeEvent, Component, ReactElement } from "react";
 
 interface SearchInputProps {
   onSearch: (searchString: string) => void;
+  isLoading: boolean;
 }
 
 interface SearchInputState {
@@ -47,7 +48,7 @@ class SearchInput extends Component<SearchInputProps, SearchInputState> {
           onChange={this.handleInputChange}
         />
 
-        <button className="search__button" onClick={this.handleSearch}>
+        <button className="button button__search" disabled={this.props.isLoading} onClick={this.handleSearch}>
           Search
         </button>
       </div>

@@ -19,7 +19,7 @@ class ResultItem extends Component<ResultItemProps> {
     return (
       <div className="card">
         <div className="card__image">
-          <img className={image ? "image" : "image--empty"} src={image} alt={name} />
+          <img className={"image"} src={image} alt={name} />
         </div>
         <div className="card__data">
           <h3 className="card__data_name">{name.replace(/-/gi, " ")}</h3>
