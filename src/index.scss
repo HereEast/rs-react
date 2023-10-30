@@ -125,7 +125,17 @@ body {
 
 .message {
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
   font-size: 2rem;
+  text-align: center;
+
+  button {
+    width: fit-content;
+  }
 }
 
 .note {

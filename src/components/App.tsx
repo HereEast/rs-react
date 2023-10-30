@@ -6,6 +6,7 @@ import { IPokemonData, IPokemonBasicData } from "../types/types";
 interface AppState {
   searchResults: IPokemonData[];
   isLoading: boolean;
+  isError: boolean;
   error: string;
 }
 
@@ -15,13 +16,25 @@ class App extends Component<Record<string, never>, AppState> {
     this.state = {
       searchResults: [],
       isLoading: false,
+      isError: false,
       error: "",
     };
   }
 
   componentDidMount(): void {
+    this.setState({
+      isError: false,
+      error: "",
+    });
+
     const savedSearchString = localStorage.getItem("searchString") || "";
     this.fetchResults(savedSearchString);
+  }
+
+  componentDidUpdate(): void {
+    if (this.state.isError) {
+      throw new Error("Test error is thrown!");
+    }
   }
 
   async getPokemon(searchString: string): Promise<IPokemonData> {
@@ -50,8 +63,10 @@ class App extends Component<Record<string, never>, AppState> {
   }
 
   async fetchResults(searchString: string): Promise<void> {
-    this.setState({ isLoading: true });
-    this.setState({ error: "" });
+    this.setState({
+      isLoading: true,
+      error: "",
+    });
 
     const URL = searchString
       ? `https://pokeapi.co/api/v2/pokemon/${searchString}`
@@ -88,14 +103,7 @@ class App extends Component<Record<string, never>, AppState> {
   };
 
   handleThrowError = (): void => {
-    try {
-      throw new Error("Test error is thrown!");
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log(error.message);
-        this.setState({ error: error.message });
-      }
-    }
+    this.setState({ isError: true });
   };
 
   render(): ReactElement {
