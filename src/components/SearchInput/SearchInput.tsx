@@ -1,0 +1,45 @@
+import { ChangeEvent, ReactElement, useEffect, useState } from "react";
+import { Button } from "../Button";
+
+import styles from "./searchInput.module.scss";
+
+interface SearchInputProps {
+  onSearch: (searchString: string) => void;
+  isLoading: boolean;
+}
+
+function SearchInput({ onSearch, isLoading }: SearchInputProps): ReactElement {
+  const [searchString, setSearchString] = useState("");
+
+  useEffect(() => {
+    const savedSearchString = localStorage.getItem("searchString");
+    if (savedSearchString) {
+      setSearchString(savedSearchString);
+    }
+  }, []);
+
+  function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
+    setSearchString(e.target.value.toLowerCase().trim());
+  }
+
+  function handleSearch(): void {
+    onSearch(searchString);
+    localStorage.setItem("searchString", searchString);
+  }
+
+  return (
+    <div className={styles.search}>
+      <input
+        className={styles.search__input}
+        type="text"
+        value={searchString}
+        placeholder="Search Pokemon"
+        onChange={handleInputChange}
+      />
+
+      <Button title="Search" className="button__search" onClick={handleSearch} disabled={isLoading} type="button" />
+    </div>
+  );
+}
+
+export default SearchInput;

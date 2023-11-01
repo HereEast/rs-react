@@ -1,0 +1,17 @@
+.search {
+  display: flex;
+  gap: 5px;
+
+  &__input {
+    height: 3rem;
+    padding: 0 1rem;
+    outline: none;
+    border: 1px solid #5b5b5b;
+    border-radius: 2px;
+    color: #000;
+
+    &:focus {
+      border: 1px solid #272727;
+    }
+  }
+}
