@@ -22,7 +22,7 @@ module.exports = {
     quotes: ["error", "double"],
     indent: ["error", 2, { SwitchCase: 1 }],
     "comma-dangle": ["error", "always-multiline"],
-    "no-console": "warn",
+    "no-console": 0,
     "prefer-const": "error",
     "no-var": "error",
     "no-unused-vars": "off",
