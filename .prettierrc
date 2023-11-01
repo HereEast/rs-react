@@ -5,6 +5,5 @@
   "singleQuote": false,
   "bracketSameLine": false,
   "trailingComma": "all",
-  "bracketSpacing": true,
-  "end_of_line": "lf"
+  "bracketSpacing": true
 }
