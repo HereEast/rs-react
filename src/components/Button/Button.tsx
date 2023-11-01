@@ -4,14 +4,14 @@ import classnames from "classnames";
 import styles from "./button.module.scss";
 
 interface ButtonProps {
-  type: "submit" | "reset" | "button";
+  type?: "submit" | "reset" | "button";
   title: string;
   className?: string;
   disabled?: boolean;
   onClick: (event?: MouseEvent<HTMLButtonElement>) => void;
 }
 
-function Button({ title, type, className, disabled, onClick }: ButtonProps): ReactElement {
+function Button({ title, type = "button", className, disabled, onClick }: ButtonProps): ReactElement {
   return (
     <button
       type={type}
