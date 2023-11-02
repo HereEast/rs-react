@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from "react";
 import { SearchInput } from "../SearchInput";
 import { Button } from "../Button";
 import { Message } from "../Message";
-import { getPokemon } from "../../utils/getPokemons";
+import { fetchPokemon } from "../../utils/fetchPokemon";
 import { IPokemonData } from "../../types/types";
 import { SearchResults } from "../SearchResults";
 
@@ -15,7 +15,7 @@ function App(): ReactElement {
 
   useEffect(() => {
     const savedSearchString = localStorage.getItem("searchString") || "";
-    fetchResults(savedSearchString);
+    fetchData(savedSearchString);
   }, []);
 
   useEffect(() => {
@@ -24,25 +24,14 @@ function App(): ReactElement {
     }
   }, [isError]);
 
-  async function fetchResults(searchString: string): Promise<void> {
+  async function fetchData(searchString: string): Promise<void> {
     setIsLoading(true);
     setIsError(false);
 
-    const URL = searchString
-      ? `https://pokeapi.co/api/v2/pokemon/${searchString}`
-      : "https://pokeapi.co/api/v2/pokemon?limit=300";
-
     try {
-      const response = await fetch(URL);
+      const results = await fetchPokemon(searchString);
 
-      if (!response.ok) {
-        throw Error("Pokemon not found. Try another one!");
-      }
-
-      const data = await response.json();
-      const pokemon = await getPokemon(searchString ? searchString : data.results);
-
-      setSearchResults(pokemon);
+      setSearchResults(results);
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
@@ -53,7 +42,7 @@ function App(): ReactElement {
   }
 
   function handleSearch(searchString: string): void {
-    fetchResults(searchString);
+    fetchData(searchString);
   }
 
   function handleThrowError(): void {
