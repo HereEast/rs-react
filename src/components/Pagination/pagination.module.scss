@@ -1,0 +1,14 @@
+.pagination {
+  display: flex;
+  gap: 1rem;
+  margin-top: 3rem;
+
+  &__button {
+    padding: 0;
+    width: 3rem;
+
+    &_active {
+      background-color: #b5b5b5;
+    }
+  }
+}
