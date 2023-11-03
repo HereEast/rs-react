@@ -10,36 +10,33 @@ import { LIMIT } from "../../constants";
 import styles from "./main.module.scss";
 import { useFetching } from "../../hooks/useFetching";
 
+// Cards on last page
+// Limit page and limit
+// Disable buttons and select
+
 function Main(): ReactElement {
   const [fetchData, searchResults, isLoading, isError, setIsError] = useFetching();
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams("");
 
   const [page, setPage] = useState(searchParams.get("offset") || "1");
-  const [limit, setLimit] = useState(LIMIT);
+  const [limit, setLimit] = useState(searchParams.get("limit") || LIMIT);
+
+  useEffect(() => {
+    setPage("1");
+    setSearchParams({ limit: limit, offset: page });
+  }, [limit]);
+
+  useEffect(() => {
+    setSearchParams({ limit: limit, offset: page });
+  }, [page]);
 
   useEffect(() => {
     const limitURL = searchParams.get("limit") || LIMIT;
 
-    if (limit !== limitURL) {
-      setSearchParams({ limit: limitURL, offset: "1" });
-      setLimit(limitURL);
-      console.log(limit, limitURL, page);
-    } else {
-      setSearchParams({ limit: limit, offset: page });
-    }
-
-    fetchData(page, limit);
-  }, [page, limit]);
-
-  // useEffect(() => {
-  //   console.log("Query:", query);
-  //   const pageURL = searchParams.get("offset") || "1";
-
-  //   setSearchParams({ limit: limit, offset: page });
-
-  //   fetchData(page, limit);
-  // }, [page, limit]);
+    setSearchParams({ limit: limitURL, offset: page });
+    fetchData(searchParams.toString());
+  }, [searchParams]);
 
   useEffect(() => {
     if (isError) {
@@ -67,7 +64,7 @@ function Main(): ReactElement {
       {isError && <Message message="Oops!.. Something wrong. Try again!" />}
       {isLoading && <Message message="Loading..." />}
 
-      <Pagination page={page} setPage={setPage} limit={limit} />
+      <Pagination page={page} setPage={setPage} limit={limit} setLimit={setLimit} />
 
       {!isError && !isLoading && <SearchResults searchResults={searchResults} />}
     </div>

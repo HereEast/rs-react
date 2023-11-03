@@ -1,7 +1,12 @@
 .pagination {
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
   margin-top: 3rem;
+
+  &__buttons {
+    display: flex;
+    gap: 1rem;
+  }
 
   &__button {
     padding: 0;
@@ -10,5 +15,41 @@
     &_active {
       background-color: #b5b5b5;
     }
+  }
+}
+
+.pagination__select {
+  position: relative;
+  height: 100%;
+  color: #000;
+  font-size: var(--text-size);
+  text-transform: uppercase;
+
+  .label {
+    margin-right: 0.5rem;
+  }
+
+  .select {
+    appearance: none;
+    display: inline-block;
+    padding: 0 2.2rem 0 0.8rem;
+    height: 3rem;
+    background-color: #ffffff;
+    border: 1px solid #5b5b5b;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 11px;
+    right: 8px;
+    width: 0.8rem;
+    height: 0.5rem;
+    background-color: #000;
+    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+    pointer-events: none;
+    transition: all 0.2s ease-in;
   }
 }
