@@ -3,7 +3,7 @@ import { IPokemonData } from "../types/types";
 import { getPokemon, getAllPokemon } from "../utils/getPokemon";
 
 type UseFetchingReturn = [
-  (page?: string, limit?: string) => Promise<void>,
+  (queryString: string) => Promise<void>,
   IPokemonData[],
   boolean,
   boolean,
@@ -15,7 +15,7 @@ export function useFetching(): UseFetchingReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  async function fetchData(page?: string, limit?: string): Promise<void> {
+  async function fetchData(queryString: string): Promise<void> {
     setIsLoading(true);
     setIsError(false);
 
@@ -26,7 +26,7 @@ export function useFetching(): UseFetchingReturn {
         const result = await getPokemon(searchString);
         setSearchResults(result);
       } else {
-        const results = await getAllPokemon(page, limit);
+        const results = await getAllPokemon(queryString);
         setSearchResults(results);
       }
     } catch (error) {
