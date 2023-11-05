@@ -1,11 +1,9 @@
 import { ReactElement } from "react";
 import { Button } from "../Button";
-import { MAX_COUNT } from "../../constants";
+import { MAX_COUNT, PAGE_ITEMS } from "../../constants";
 
 import classnames from "classnames";
 import styles from "./pagination.module.scss";
-
-const selectOptions = [2, 3, 4, 5, 6];
 
 interface PaginationProps {
   limit: string;
@@ -40,7 +38,7 @@ function Pagination({ page, limit, setPage, setLimit, isLoading }: PaginationPro
           onChange={(e): void => setLimit(e.target.value)}
           disabled={isLoading}
         >
-          {selectOptions.map((value) => (
+          {PAGE_ITEMS.map((value) => (
             <option key={value} value={value}>
               {value}
             </option>
