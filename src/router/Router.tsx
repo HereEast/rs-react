@@ -1,10 +1,13 @@
-import { Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { Main } from "../components/Main";
+import { ReactElement } from "react";
 
-export const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/">
-      <Route index element={<Main />} />
-    </Route>,
-  ),
-);
+function Router(): ReactElement {
+  return (
+    <Routes>
+      <Route path="/" element={<Main />} />
+    </Routes>
+  );
+}
+
+export default Router;
