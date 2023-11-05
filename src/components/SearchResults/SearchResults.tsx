@@ -9,9 +9,10 @@ interface SearchResultsProps {
   searchResults: IPokemonData[];
   page: string;
   limit: string;
+  setSelectedItem: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-function SearchResults({ searchResults, page, limit }: SearchResultsProps): ReactElement {
+function SearchResults({ searchResults, page, limit, setSelectedItem }: SearchResultsProps): ReactElement {
   const lastPage = Math.ceil(Number(MAX_COUNT) / Number(limit));
   const lastPageCount = Number(MAX_COUNT) - Number(limit) * (lastPage - 1);
 
@@ -21,7 +22,7 @@ function SearchResults({ searchResults, page, limit }: SearchResultsProps): Reac
     <div className={styles.results}>
       {array.length > 0 &&
         array.map((data) => (
-          <Card key={data.id} name={data.name} height={data.height} weight={data.weight} image={data.image} />
+          <Card key={data.id} name={data.name} image={data.image} setSelectedItem={setSelectedItem} />
         ))}
     </div>
   );

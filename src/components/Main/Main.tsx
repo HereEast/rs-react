@@ -5,14 +5,18 @@ import { Button } from "../Button";
 import { Message } from "../Message";
 import { SearchResults } from "../SearchResults";
 import { Pagination } from "../Pagination";
+import { useFetching } from "../../hooks/useFetching";
 import { LIMIT } from "../../constants";
 
+import classnames from "classnames";
 import styles from "./main.module.scss";
-import { useFetching } from "../../hooks/useFetching";
+import { Details } from "../Details";
 
 // Limit page and limit
 // Change strings to numbers
 // Remake pagination w next, prev, first, last
+// Main to Home
+// Split into 2 components: Results and Details
 
 function Main(): ReactElement {
   const [fetchData, searchResults, isLoading, isError, setIsError] = useFetching();
@@ -21,6 +25,8 @@ function Main(): ReactElement {
 
   const [page, setPage] = useState(searchParams.get("offset") || "1");
   const [limit, setLimit] = useState(searchParams.get("limit") || LIMIT);
+
+  const [selectedItem, setSelectedItem] = useState<null | string>(null);
 
   useEffect(() => {
     setPage("1");
@@ -53,20 +59,29 @@ function Main(): ReactElement {
   }
 
   return (
-    <div className={styles.page}>
-      <header className="header">
-        <span className="note">The total number of Pokémon is limited to 300 due to practical considerations.</span>
+    <div className={classnames(styles.page, selectedItem ? styles.page__split : "")}>
+      <div className={classnames(styles.page__column, styles.page__results)}>
+        <header className="header">
+          <span className="note">The total number of Pokémon is limited to 300 due to practical considerations.</span>
 
-        <SearchInput onSearch={handleSearch} isLoading={isLoading} />
-        <Button title="Throw Error ⚡️" onClick={handleThrowError} disabled={isLoading} />
-      </header>
+          <SearchInput onSearch={handleSearch} isLoading={isLoading} />
+          <Button title="Throw Error ⚡️" onClick={handleThrowError} disabled={isLoading} />
+        </header>
 
-      {isError && <Message message="Oops!.. Something wrong. Try again!" />}
-      {isLoading && <Message message="Loading..." />}
+        {isError && <Message message="Oops!.. Something wrong. Try again!" />}
+        {isLoading && <Message message="Loading..." />}
 
-      <Pagination page={page} setPage={setPage} limit={limit} setLimit={setLimit} isLoading={isLoading} />
+        <Pagination page={page} setPage={setPage} limit={limit} setLimit={setLimit} isLoading={isLoading} />
 
-      {!isError && !isLoading && <SearchResults searchResults={searchResults} page={page} limit={limit} />}
+        {!isError && !isLoading && (
+          <SearchResults searchResults={searchResults} page={page} limit={limit} setSelectedItem={setSelectedItem} />
+        )}
+      </div>
+      {selectedItem && (
+        <div className={classnames(styles.page__column, styles.page__details)}>
+          <Details selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
+        </div>
+      )}
     </div>
   );
 }
