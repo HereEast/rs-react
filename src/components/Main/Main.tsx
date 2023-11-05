@@ -10,9 +10,9 @@ import { LIMIT } from "../../constants";
 import styles from "./main.module.scss";
 import { useFetching } from "../../hooks/useFetching";
 
-// Cards on last page
 // Limit page and limit
-// Disable buttons and select
+// Change strings to numbers
+// Remake pagination w next, prev, first, last
 
 function Main(): ReactElement {
   const [fetchData, searchResults, isLoading, isError, setIsError] = useFetching();
@@ -64,9 +64,9 @@ function Main(): ReactElement {
       {isError && <Message message="Oops!.. Something wrong. Try again!" />}
       {isLoading && <Message message="Loading..." />}
 
-      <Pagination page={page} setPage={setPage} limit={limit} setLimit={setLimit} />
+      <Pagination page={page} setPage={setPage} limit={limit} setLimit={setLimit} isLoading={isLoading} />
 
-      {!isError && !isLoading && <SearchResults searchResults={searchResults} />}
+      {!isError && !isLoading && <SearchResults searchResults={searchResults} page={page} limit={limit} />}
     </div>
   );
 }

@@ -12,9 +12,10 @@ interface PaginationProps {
   page: string;
   setPage: React.Dispatch<React.SetStateAction<string>>;
   setLimit: React.Dispatch<React.SetStateAction<string>>;
+  isLoading: boolean;
 }
 
-function Pagination({ page, limit, setPage, setLimit }: PaginationProps): ReactElement {
+function Pagination({ page, limit, setPage, setLimit, isLoading }: PaginationProps): ReactElement {
   return (
     <div className={styles.pagination}>
       <div className={styles.pagination__buttons}>
@@ -27,13 +28,18 @@ function Pagination({ page, limit, setPage, setLimit }: PaginationProps): ReactE
               page === String(index + 1) ? styles.pagination__button_active : "",
             )}
             onClick={(): void => setPage(String(index + 1))}
-            disabled={page === String(index + 1)}
+            disabled={isLoading || page === String(index + 1)}
           />
         ))}
       </div>
       <div className={styles.pagination__select}>
         <span className={styles.label}>Items:</span>
-        <select className={styles.select} defaultValue={limit} onChange={(e): void => setLimit(e.target.value)}>
+        <select
+          className={styles.select}
+          defaultValue={limit}
+          onChange={(e): void => setLimit(e.target.value)}
+          disabled={isLoading}
+        >
           {selectOptions.map((value) => (
             <option key={value} value={value}>
               {value}
