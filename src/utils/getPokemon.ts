@@ -24,7 +24,7 @@ export async function getAllPokemon(queryString: string): Promise<IPokemonData[]
   const response = await fetch(URL);
   const data = await response.json();
 
-  const pokemonDataPromises = data.results.map(async (data) => {
+  const pokemonDataPromises = data.results.map(async (data: IPokemonData) => {
     const response = await getPokemon(data.name);
     return response[0];
   });
