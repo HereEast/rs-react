@@ -5,13 +5,13 @@ import styles from "./button.module.scss";
 
 interface ButtonProps {
   type?: "submit" | "reset" | "button";
-  title: string | number;
+  name: string | number;
   className?: string;
   disabled?: boolean;
   onClick: (event?: MouseEvent<HTMLButtonElement>) => void;
 }
 
-function Button({ title, type = "button", className, disabled, onClick }: ButtonProps): ReactElement {
+function Button({ name, type = "button", className, disabled, onClick }: ButtonProps): ReactElement {
   return (
     <button
       type={type}
@@ -19,7 +19,7 @@ function Button({ title, type = "button", className, disabled, onClick }: Button
       onClick={(event): void => onClick(event)}
       disabled={disabled}
     >
-      {title}
+      {name}
     </button>
   );
 }
