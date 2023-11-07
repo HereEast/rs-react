@@ -1,46 +1,57 @@
-import { ReactElement } from "react";
+import { ChangeEvent, ReactElement } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "../Button";
-import { MAX_COUNT, PAGE_ITEMS } from "../../constants";
+import { LIMIT, MAX_COUNT, INIT_PARAMS, RANGE_OPTIONS } from "../../constants";
 
 import classnames from "classnames";
 import styles from "./pagination.module.scss";
 
 interface PaginationProps {
-  limit: string;
-  page: string;
-  setPage: React.Dispatch<React.SetStateAction<string>>;
-  setLimit: React.Dispatch<React.SetStateAction<string>>;
   isLoading: boolean;
 }
 
-function Pagination({ page, limit, setPage, setLimit, isLoading }: PaginationProps): ReactElement {
+function Pagination({ isLoading }: PaginationProps): ReactElement {
+  const [searchParams, setSearchParams] = useSearchParams(INIT_PARAMS);
+
+  const page = searchParams.get("offset") || "1";
+  const limit = searchParams.get("limit") || LIMIT;
+
+  function handleChangePage(page: number): void {
+    setSearchParams({ limit: limit, offset: String(page) });
+  }
+
+  function handleSetLimit(e: ChangeEvent<HTMLSelectElement>): void {
+    const selectedOption = e.target.value;
+
+    if (limit === selectedOption) {
+      return;
+    }
+
+    setSearchParams({ limit: selectedOption, offset: "1" });
+  }
+
   return (
     <div className={styles.pagination}>
       <div className={styles.pagination__buttons}>
         {new Array(Math.ceil(Number(MAX_COUNT) / Number(limit))).fill(1).map((_: number, index) => (
           <Button
             key={index}
-            title={index + 1}
+            name={index + 1}
             className={classnames(
               styles.pagination__button,
               page === String(index + 1) ? styles.pagination__button_active : "",
             )}
-            onClick={(): void => setPage(String(index + 1))}
+            onClick={(): void => handleChangePage(index + 1)}
             disabled={isLoading || page === String(index + 1)}
           />
         ))}
       </div>
       <div className={styles.pagination__select}>
-        <span className={styles.label}>Items:</span>
-        <select
-          className={styles.select}
-          defaultValue={limit}
-          onChange={(e): void => setLimit(e.target.value)}
-          disabled={isLoading}
-        >
-          {PAGE_ITEMS.map((value) => (
-            <option key={value} value={value}>
-              {value}
+        <label className={styles.label}>Items:</label>
+        <select className={styles.select} defaultValue={limit} onChange={(e): void => handleSetLimit(e)}>
+          {RANGE_OPTIONS.map((option) => (
+            <option key={option} value={option}>
+              {option}
             </option>
           ))}
         </select>
