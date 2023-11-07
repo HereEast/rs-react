@@ -1,18 +1,21 @@
 import { ReactElement } from "react";
 import { Card } from "../Card";
 import { IPokemonData } from "../../types/types";
-import { MAX_COUNT } from "../../constants";
+import { LIMIT, MAX_COUNT } from "../../constants";
 
 import styles from "./searchResults.module.scss";
+import { useSearchParams } from "react-router-dom";
 
 interface SearchResultsProps {
   searchResults: IPokemonData[];
-  page: string;
-  limit: string;
-  setSelectedItem: React.Dispatch<React.SetStateAction<string | null>>;
+  page?: string;
+  // limit: string;
 }
 
-function SearchResults({ searchResults, page, limit, setSelectedItem }: SearchResultsProps): ReactElement {
+function SearchResults({ searchResults, page }: SearchResultsProps): ReactElement {
+  const [searchParams] = useSearchParams();
+  const limit = searchParams.get("limit") || LIMIT;
+
   const lastPage = Math.ceil(Number(MAX_COUNT) / Number(limit));
   const lastPageCount = Number(MAX_COUNT) - Number(limit) * (lastPage - 1);
 
@@ -20,10 +23,7 @@ function SearchResults({ searchResults, page, limit, setSelectedItem }: SearchRe
 
   return (
     <div className={styles.results}>
-      {array.length > 0 &&
-        array.map((data) => (
-          <Card key={data.id} name={data.name} image={data.image} setSelectedItem={setSelectedItem} />
-        ))}
+      {array.length > 0 && array.map((data) => <Card key={data.id} name={data.name} image={data.image} />)}
     </div>
   );
 }
