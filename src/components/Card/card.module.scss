@@ -1,19 +1,22 @@
+@import "../../styles/index.scss";
+
 .card {
-  padding: 2rem 3rem 3rem;
-  background-color: #fff;
-  border: 1px solid #d4d9e2;
+  width: 100%;
+  padding: 2rem;
+  background-color: var(--white);
+  border: 1px solid var(--card-border);
   border-radius: 1rem;
   font-size: 2rem;
 
   transition: all 0.2s ease-in;
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.05);
   }
 
   &__image {
-    width: 20rem;
-    height: 20rem;
+    width: 100%;
     overflow: hidden;
     margin-bottom: 1rem;
 
@@ -28,12 +31,9 @@
     flex-direction: column;
 
     &_name {
+      font-size: 2rem;
       text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    span {
-      font-size: 1.6rem;
+      text-align: center;
     }
   }
 }
