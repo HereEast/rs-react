@@ -2,20 +2,20 @@ import { useState } from "react";
 import { IPokemonData } from "../types/types";
 import { getPokemon, getAllPokemon } from "../utils/getPokemon";
 
-type UseFetchingReturn = [
-  (queryString: string) => Promise<void>,
-  IPokemonData[],
-  boolean,
-  boolean,
-  React.Dispatch<React.SetStateAction<boolean>>,
-];
+interface UseFetchingReturn {
+  fetchData: (queryString?: string) => Promise<void>;
+  searchResults: IPokemonData[];
+  isLoading: boolean;
+  isError: boolean;
+  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 export function useFetching(): UseFetchingReturn {
   const [searchResults, setSearchResults] = useState<IPokemonData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  async function fetchData(queryString: string): Promise<void> {
+  async function fetchData(queryString: string = ""): Promise<void> {
     setIsLoading(true);
     setIsError(false);
 
@@ -38,5 +38,5 @@ export function useFetching(): UseFetchingReturn {
     }
   }
 
-  return [fetchData, searchResults, isLoading, isError, setIsError];
+  return { fetchData, searchResults, isLoading, isError, setIsError };
 }
