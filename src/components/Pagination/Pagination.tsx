@@ -40,7 +40,7 @@ function Pagination({ isLoading }: PaginationProps): ReactElement {
       return;
     }
 
-    setSearchParams({ limit: selectedOption, offset: "1" });
+    setSearchParams({ limit: selectedOption, offset: MIN_COUNT });
   }
 
   return (
