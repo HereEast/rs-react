@@ -1,1 +1,18 @@
 @import "../../styles/index.scss";
+
+.header {
+  padding: 2.5rem 0 3rem;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.note {
+  padding: 0.3rem 1rem 0.5rem;
+  position: absolute;
+  top: 0;
+  font-size: 1.3rem;
+  background-color: var(--black);
+  border-radius: 0 0 5px 5px;
+  color: var(--white);
+}
