@@ -20,15 +20,26 @@
   }
 }
 
-.pagination__select {
-  position: relative;
+.pagination__select,
+.pagination__buttons {
   height: 100%;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: var(--black);
-  font-size: var(--text-size);
-  text-transform: uppercase;
+  gap: 1rem;
+
+  .label {
+    color: var(--black);
+    font-size: var(--text-size);
+    text-transform: uppercase;
+
+    span {
+      margin-left: 0.5rem;
+    }
+  }
+}
+
+.pagination__select {
+  position: relative;
 
   .select {
     appearance: none;

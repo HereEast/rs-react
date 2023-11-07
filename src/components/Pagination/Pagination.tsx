@@ -1,9 +1,9 @@
-import { ChangeEvent, ReactElement } from "react";
+import { ChangeEvent, MouseEvent, ReactElement } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "../Button";
-import { LIMIT, MAX_COUNT, INIT_PARAMS, RANGE_OPTIONS } from "../../constants";
+import { countMaxPages } from "../../utils";
+import { LIMIT, INIT_PARAMS, RANGE_OPTIONS, MIN_COUNT } from "../../constants";
 
-import classnames from "classnames";
 import styles from "./pagination.module.scss";
 
 interface PaginationProps {
@@ -13,11 +13,24 @@ interface PaginationProps {
 function Pagination({ isLoading }: PaginationProps): ReactElement {
   const [searchParams, setSearchParams] = useSearchParams(INIT_PARAMS);
 
-  const page = searchParams.get("offset") || "1";
+  const page = searchParams.get("offset") || MIN_COUNT;
   const limit = searchParams.get("limit") || LIMIT;
+  const MAX_PAGES = countMaxPages(limit);
 
-  function handleChangePage(page: number): void {
-    setSearchParams({ limit: limit, offset: String(page) });
+  function handleChangePage(e: MouseEvent<HTMLButtonElement>): void {
+    if (!(e.target instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    const isPrevButton = e.target.classList.contains("prev");
+
+    if (isPrevButton) {
+      const newPage = Number(page) - 1;
+      setSearchParams({ limit: limit, offset: String(newPage) });
+    } else {
+      const newPage = Number(page) + 1;
+      setSearchParams({ limit: limit, offset: String(newPage) });
+    }
   }
 
   function handleSetLimit(e: ChangeEvent<HTMLSelectElement>): void {
@@ -33,22 +46,33 @@ function Pagination({ isLoading }: PaginationProps): ReactElement {
   return (
     <div className={styles.pagination}>
       <div className={styles.pagination__buttons}>
-        {new Array(Math.ceil(Number(MAX_COUNT) / Number(limit))).fill(1).map((_: number, index) => (
-          <Button
-            key={index}
-            name={index + 1}
-            className={classnames(
-              styles.pagination__button,
-              page === String(index + 1) ? styles.pagination__button_active : "",
-            )}
-            onClick={(): void => handleChangePage(index + 1)}
-            disabled={isLoading || page === String(index + 1)}
-          />
-        ))}
+        <label className={styles.label}>
+          Page:
+          <span>
+            {page} / {MAX_PAGES}
+          </span>
+        </label>
+        <Button
+          name="Prev"
+          className="prev"
+          onClick={(e): void => handleChangePage(e)}
+          disabled={page === MIN_COUNT || isLoading}
+        />
+        <Button
+          name="Next"
+          className="next"
+          onClick={(e): void => handleChangePage(e)}
+          disabled={page === MAX_PAGES || isLoading}
+        />
       </div>
       <div className={styles.pagination__select}>
         <label className={styles.label}>Items:</label>
-        <select className={styles.select} defaultValue={limit} onChange={(e): void => handleSetLimit(e)}>
+        <select
+          className={styles.select}
+          defaultValue={limit}
+          onChange={(e): void => handleSetLimit(e)}
+          disabled={isLoading}
+        >
           {RANGE_OPTIONS.map((option) => (
             <option key={option} value={option}>
               {option}
