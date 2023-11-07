@@ -8,10 +8,14 @@ interface ButtonProps {
   name: string | number;
   className?: string;
   disabled?: boolean;
-  onClick: (event?: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
-function Button({ name, type = "button", className, disabled, onClick }: ButtonProps): ReactElement {
+const noop = (): void => {
+  return;
+};
+
+function Button({ name, type = "button", className, disabled, onClick = noop }: ButtonProps): ReactElement {
   return (
     <button
       type={type}
