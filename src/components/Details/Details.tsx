@@ -1,6 +1,7 @@
 import { ReactElement, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "../Button";
+import { Message } from "../Message";
 import { getPokemon } from "../../utils/getPokemon";
 import { IPokemonData } from "../../types/types";
 import { useDetailsContext } from "../../hooks/useDetailsContext";
@@ -10,6 +11,7 @@ import styles from "./details.module.scss";
 function Details(): ReactElement {
   const [details, setDetails] = useState<null | IPokemonData>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const { selectedItem, setSelectedItem } = useDetailsContext();
 
@@ -19,14 +21,17 @@ function Details(): ReactElement {
   useEffect(() => {
     const getPokemonDetails = async (): Promise<void> => {
       setIsLoading(true);
+      setIsError(false);
 
       try {
         if (selectedItem) {
           const data = await getPokemon(selectedItem);
           setDetails(data[0]);
         }
-      } catch (e) {
-        console.log(e);
+      } catch (error) {
+        if (error instanceof Error) {
+          setIsError(true);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -41,19 +46,28 @@ function Details(): ReactElement {
   }
 
   return (
-    <>
-      {isLoading && "Loading..."}
-      {!isLoading && (
-        <div className={styles.details}>
-          <div className={styles.details__content}>
-            <h2>{details?.name.toUpperCase()}</h2>
-            <span>Weight: {details?.weight}</span>
-            <span>Height: {details?.height}</span>
+    <div className={styles.details__container}>
+      {isError && <Message message="Oops!.. Something wrong. Try again!" />}
+      {isLoading && <Message message="Loading..." />}
+
+      {!isLoading && !isError && (
+        <>
+          <div className={styles.details}>
+            <div className={styles.details__image}>
+              <img src={details?.image} alt={`Image of ${details?.name.toUpperCase()}`} />
+            </div>
+            <div className={styles.details__info}>
+              <h2>{details?.name.toUpperCase()}</h2>
+              <div className={styles.details__characteristics}>
+                <span>Weight: {details?.weight}</span>
+                <span>Height: {details?.height}</span>
+              </div>
+            </div>
           </div>
-          <Button name="Close" onClick={handleClose} />
-        </div>
+          <Button className={styles.details__button} name="Close" onClick={handleClose} />
+        </>
       )}
-    </>
+    </div>
   );
 }
 
