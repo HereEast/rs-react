@@ -32,18 +32,3 @@ export async function getAllPokemon(queryString: string): Promise<IPokemonData[]
   const pokemonData = await Promise.all(pokemonDataPromises);
   return pokemonData;
 }
-
-// export async function getAllPokemon(page: string = "1", limit: string = LIMIT): Promise<IPokemonData[]> {
-//   const URL = `${BASE_URL}?limit=${limit}&offset=${page}`;
-
-//   const response = await fetch(URL);
-//   const data = await response.json();
-
-//   const pokemonDataPromises = data.results.map(async (data) => {
-//     const response = await getPokemon(data.name);
-//     return response[0];
-//   });
-
-//   const pokemonData = await Promise.all(pokemonDataPromises);
-//   return pokemonData;
-// }

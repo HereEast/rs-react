@@ -12,12 +12,11 @@ import classnames from "classnames";
 import styles from "./home.module.scss";
 
 // Limit page and limit
-// Remake pagination w next, prev, first, last
 
 function Home(): ReactElement {
   const { selectedItem } = useDetailsContext();
-
   const { fetchData, searchResults, isLoading, isError, setIsError } = useFetching();
+
   const [searchParams, setSearchParams] = useSearchParams(INIT_PARAMS);
 
   useEffect(() => {
