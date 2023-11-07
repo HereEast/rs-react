@@ -39,7 +39,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     if (this.state.hasError) {
       return (
         <Message message="Something went wrong!">
-          <Button title="Reload page" onClick={(): void => this.resetError()} />
+          <Button name="Reload page" onClick={(): void => this.resetError()} />
         </Message>
       );
     }

@@ -37,7 +37,7 @@ function SearchInput({ onSearch, isLoading }: SearchInputProps): ReactElement {
         onChange={handleInputChange}
       />
 
-      <Button title="Search" onClick={handleSearch} disabled={isLoading} />
+      <Button name="Search" onClick={handleSearch} disabled={isLoading} />
     </div>
   );
 }
