@@ -13,12 +13,14 @@ interface HeaderProps {
 function Header({ isLoading, onSearch, throwError }: HeaderProps): ReactElement {
   return (
     <header className={styles.header}>
-      <span className={styles.note}>
-        The total number of Pokémon is limited to 300 due to practical considerations.
+      <span className={styles.header__note}>
+        The total number of Pokémon is limited to 300 due to practical reasons.
       </span>
 
-      <SearchInput onSearch={onSearch} isLoading={isLoading} />
-      <Button name="Throw Error ⚡️" onClick={throwError} disabled={isLoading} />
+      <div className={styles.header__controls}>
+        <SearchInput onSearch={onSearch} isLoading={isLoading} />
+        <Button name="Throw Error ⚡️" onClick={throwError} disabled={isLoading} />
+      </div>
     </header>
   );
 }
