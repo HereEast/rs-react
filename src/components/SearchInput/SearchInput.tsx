@@ -23,8 +23,12 @@ function SearchInput({ onSearch, isLoading }: SearchInputProps): ReactElement {
   }
 
   function handleSearch(): void {
-    onSearch(searchString);
+    if (localStorage.getItem("searchString") === searchString) {
+      return;
+    }
+
     localStorage.setItem("searchString", searchString);
+    onSearch(searchString);
   }
 
   return (
