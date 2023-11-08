@@ -1,10 +1,9 @@
 import { ReactElement, useEffect, useState, MouseEvent } from "react";
-import { useSearchParams, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams, Outlet, useNavigate, useParams } from "react-router-dom";
 import { Header } from "../../components/Header";
 import { Message } from "../../components/Message";
 import { SearchResults } from "../../components/SearchResults";
 import { Pagination } from "../../components/Pagination";
-import { NotFound } from "../NotFound";
 import { useFetchPokemon, useDetailsContext, useMaxPage } from "../../hooks";
 import { INIT_PARAMS, LIMIT, MIN_COUNT } from "../../constants";
 
@@ -15,7 +14,7 @@ import styles from "./home.module.scss";
 
 function Home(): ReactElement {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { details } = useParams();
 
   const { selectedItem, setSelectedItem } = useDetailsContext();
   const { maxPage, getMaxPage } = useMaxPage();
@@ -23,18 +22,17 @@ function Home(): ReactElement {
 
   const [searchParams, setSearchParams] = useSearchParams(INIT_PARAMS);
   const [isError, setIsError] = useState(false);
-  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    setNotFound(false);
+    getMaxPage(searchParams);
 
-    if (location.pathname !== "/") {
-      setNotFound(true);
+    if (details) {
+      setSelectedItem(details.split("details-")[1]);
     } else {
-      getMaxPage(searchParams);
-
       const limit = parseInt(searchParams.get("limit") || LIMIT, 10);
       const page = parseInt(searchParams.get("offset") || MIN_COUNT, 10);
+
+      console.log(page);
 
       setSearchParams({ limit: String(limit), offset: String(page) });
     }
@@ -73,32 +71,27 @@ function Home(): ReactElement {
   }
 
   return (
-    <>
-      {notFound && <NotFound />}
-      {!notFound && (
-        <div
-          className={classnames(styles.page, selectedItem ? styles.page__split : "")}
-          onClick={(e): void => handleClose(e)}
-        >
-          <section className={classnames(styles.page__column, "page__results")}>
-            <Header isLoading={isLoading} onSearch={handleSearch} throwError={handleThrowError} />
+    <div
+      className={classnames(styles.page, selectedItem ? styles.page__split : "")}
+      onClick={(e): void => handleClose(e)}
+    >
+      <section className={classnames(styles.page__column, styles.page__results, "page__results")}>
+        <Header isLoading={isLoading} onSearch={handleSearch} throwError={handleThrowError} />
 
-            <Pagination isLoading={isLoading} maxPage={maxPage} />
+        <Pagination isLoading={isLoading} maxPage={maxPage} />
 
-            {error && <Message message={error} />}
-            {isLoading && <Message message="Loading..." />}
+        {error && <Message message={error} />}
+        {isLoading && <Message message="Loading..." />}
 
-            {!error && !isLoading && <SearchResults searchResults={searchResults} />}
-          </section>
+        {!error && !isLoading && <SearchResults searchResults={searchResults} />}
+      </section>
 
-          {selectedItem && (
-            <section className={classnames(styles.page__column, styles.page__details)}>
-              <Outlet />
-            </section>
-          )}
-        </div>
+      {selectedItem && (
+        <section className={classnames(styles.page__column, styles.page__details)}>
+          <Outlet />
+        </section>
       )}
-    </>
+    </div>
   );
 }
 
