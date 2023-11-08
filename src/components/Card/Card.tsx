@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useDetailsContext } from "../../hooks/useDetailsContext";
+import { useDetailsContext } from "../../hooks";
 
 import styles from "./card.module.scss";
 

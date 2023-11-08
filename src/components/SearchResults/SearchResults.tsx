@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Card } from "../Card";
 import { IPokemonData } from "../../types/types";
 import { LIMIT, MAX_COUNT } from "../../constants";
 
 import styles from "./searchResults.module.scss";
-import { useSearchParams } from "react-router-dom";
 
 interface SearchResultsProps {
   searchResults: IPokemonData[];
