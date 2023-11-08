@@ -1,20 +1,19 @@
 import { ChangeEvent, MouseEvent, ReactElement } from "react";
-import { useSearchParams } from "react-router-dom";
 import { Button } from "../Button";
 import { countMaxPages } from "../../utils";
-import { LIMIT, INIT_PARAMS, RANGE_OPTIONS, MIN_COUNT } from "../../constants";
+import { RANGE_OPTIONS, MIN_COUNT } from "../../constants";
 
 import styles from "./pagination.module.scss";
 
 interface PaginationProps {
   isLoading: boolean;
+  page: string;
+  limit: string;
+  setPage: (page: string) => void;
+  setLimit: (page: string) => void;
 }
 
-function Pagination({ isLoading }: PaginationProps): ReactElement {
-  const [searchParams, setSearchParams] = useSearchParams(INIT_PARAMS);
-
-  const page = searchParams.get("offset") || MIN_COUNT;
-  const limit = searchParams.get("limit") || LIMIT;
+function Pagination({ isLoading, page, limit, setPage, setLimit }: PaginationProps): ReactElement {
   const MAX_PAGES = countMaxPages(limit);
 
   function handleChangePage(e: MouseEvent<HTMLButtonElement>): void {
@@ -26,10 +25,10 @@ function Pagination({ isLoading }: PaginationProps): ReactElement {
 
     if (isPrevButton) {
       const newPage = Number(page) - 1;
-      setSearchParams({ limit: limit, offset: String(newPage) });
+      setPage(String(newPage));
     } else {
       const newPage = Number(page) + 1;
-      setSearchParams({ limit: limit, offset: String(newPage) });
+      setPage(String(newPage));
     }
   }
 
@@ -40,7 +39,8 @@ function Pagination({ isLoading }: PaginationProps): ReactElement {
       return;
     }
 
-    setSearchParams({ limit: selectedOption, offset: MIN_COUNT });
+    setLimit(selectedOption);
+    setPage("1");
   }
 
   return (
