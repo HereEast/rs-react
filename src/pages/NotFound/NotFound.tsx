@@ -1,17 +1,20 @@
 import { ReactElement } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Message } from "../../components/Message";
-import { INIT_PARAMS } from "../../constants";
-
-import classnames from "classnames";
-import styles from "./notFound.module.scss";
+import { Button } from "../../components/Button";
 
 function NotFound(): ReactElement {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  function navigateBack(): void {
+    navigate(`/?${searchParams.toString()}`);
+    location.reload();
+  }
+
   return (
     <Message message="Page not found (404)">
-      <Link to={`/?${INIT_PARAMS}`} className={classnames(styles.link, styles.link_button)}>
-        Back to main
-      </Link>
+      <Button name="Back to main" onClick={navigateBack} />
     </Message>
   );
 }
