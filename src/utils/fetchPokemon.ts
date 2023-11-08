@@ -1,7 +1,7 @@
 import { BASE_URL } from "../constants";
 import { IPokemonData } from "../types/types";
 
-export async function getPokemon(searchString: string): Promise<IPokemonData[]> {
+export async function fetchPokemon(searchString: string): Promise<IPokemonData[]> {
   const URL = `${BASE_URL}${searchString}`;
 
   const response = await fetch(URL);
@@ -18,14 +18,14 @@ export async function getPokemon(searchString: string): Promise<IPokemonData[]> 
   ];
 }
 
-export async function getAllPokemon(queryString: string): Promise<IPokemonData[]> {
+export async function fetchAllPokemon(queryString: string): Promise<IPokemonData[]> {
   const URL = `${BASE_URL}?${queryString}`;
 
   const response = await fetch(URL);
   const data = await response.json();
 
   const pokemonDataPromises = data.results.map(async (data: IPokemonData) => {
-    const response = await getPokemon(data.name);
+    const response = await fetchPokemon(data.name);
     return response[0];
   });
 
