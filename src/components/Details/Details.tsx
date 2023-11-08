@@ -2,9 +2,9 @@ import { ReactElement, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "../Button";
 import { Message } from "../Message";
-import { getPokemon } from "../../utils/getPokemon";
+import { useDetailsContext } from "../../hooks";
+import { fetchPokemon } from "../../utils";
 import { IPokemonData } from "../../types/types";
-import { useDetailsContext } from "../../hooks/useDetailsContext";
 
 import styles from "./details.module.scss";
 
@@ -19,14 +19,14 @@ function Details(): ReactElement {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const getPokemonDetails = async (): Promise<void> => {
+    async function getPokemonDetails(): Promise<void> {
       setIsLoading(true);
       setIsError(false);
 
       try {
         if (selectedItem) {
-          const data = await getPokemon(selectedItem);
-          setDetails(data[0]);
+          const [data] = await fetchPokemon(selectedItem);
+          setDetails(data);
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -35,7 +35,7 @@ function Details(): ReactElement {
       } finally {
         setIsLoading(false);
       }
-    };
+    }
 
     getPokemonDetails();
   }, [selectedItem]);
