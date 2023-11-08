@@ -1,5 +1,5 @@
-import { ReactElement, useEffect, useState } from "react";
-import { useSearchParams, Outlet, useLocation } from "react-router-dom";
+import { ReactElement, useEffect, useState, MouseEvent } from "react";
+import { useSearchParams, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Header } from "../../components/Header";
 import { Message } from "../../components/Message";
 import { SearchResults } from "../../components/SearchResults";
@@ -14,10 +14,10 @@ import styles from "./home.module.scss";
 // Limit page and limit
 
 function Home(): ReactElement {
+  const navigate = useNavigate();
   const location = useLocation();
 
-  const { selectedItem } = useDetailsContext();
-
+  const { selectedItem, setSelectedItem } = useDetailsContext();
   const { maxPage, getMaxPage } = useMaxPage();
   const { getPokemon, getAllPokemon, searchResults, isLoading, error } = useFetchPokemon();
 
@@ -61,12 +61,26 @@ function Home(): ReactElement {
     setIsError(true);
   }
 
+  function handleClose(e: MouseEvent): void {
+    if (!(e.target instanceof HTMLElement) || !selectedItem) {
+      return;
+    }
+
+    if (e.target.closest(".page__results") && !e.target.closest(".card")) {
+      setSelectedItem(null);
+      navigate(`/?${searchParams.toString()}`);
+    }
+  }
+
   return (
     <>
       {notFound && <NotFound />}
       {!notFound && (
-        <div className={classnames(styles.page, selectedItem ? styles.page__split : "")}>
-          <section className={classnames(styles.page__column, styles.page__results)}>
+        <div
+          className={classnames(styles.page, selectedItem ? styles.page__split : "")}
+          onClick={(e): void => handleClose(e)}
+        >
+          <section className={classnames(styles.page__column, "page__results")}>
             <Header isLoading={isLoading} onSearch={handleSearch} throwError={handleThrowError} />
 
             <Pagination isLoading={isLoading} maxPage={maxPage} />

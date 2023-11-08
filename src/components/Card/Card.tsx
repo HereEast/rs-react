@@ -2,6 +2,7 @@ import { ReactElement } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDetailsContext } from "../../hooks";
 
+import classnames from "classnames";
 import styles from "./card.module.scss";
 
 interface CardProps {
@@ -22,7 +23,7 @@ function Card({ name, image }: CardProps): ReactElement {
   }
 
   return (
-    <div className={styles.card} onClick={handleCardClick}>
+    <div className={classnames(styles.card, "card")} onClick={handleCardClick}>
       <div className={styles.card__image}>
         <img className={styles.image} src={image} alt={name} />
       </div>
