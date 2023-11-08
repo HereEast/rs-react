@@ -25,8 +25,8 @@ function SearchInput({ onSearch, isLoading }: SearchInputProps): ReactElement {
   function handleSearch(): void {
     const searchItem = searchString.toLowerCase().trim();
 
-    localStorage.setItem("searchString", searchItem);
     onSearch(searchString);
+    localStorage.setItem("searchString", searchItem);
   }
 
   return (

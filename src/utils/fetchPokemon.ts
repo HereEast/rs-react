@@ -29,6 +29,6 @@ export async function fetchAllPokemon(queryString: string): Promise<IPokemonData
     return response[0];
   });
 
-  const pokemonData = await Promise.all(pokemonDataPromises);
-  return pokemonData;
+  const results = await Promise.all(pokemonDataPromises);
+  return results;
 }
