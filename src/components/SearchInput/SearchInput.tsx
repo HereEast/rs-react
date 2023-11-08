@@ -19,15 +19,13 @@ function SearchInput({ onSearch, isLoading }: SearchInputProps): ReactElement {
   }, []);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
-    setSearchString(e.target.value.toLowerCase().trim());
+    setSearchString(e.target.value);
   }
 
   function handleSearch(): void {
-    if (localStorage.getItem("searchString") === searchString) {
-      return;
-    }
+    const searchItem = searchString.toLowerCase().trim();
 
-    localStorage.setItem("searchString", searchString);
+    localStorage.setItem("searchString", searchItem);
     onSearch(searchString);
   }
 

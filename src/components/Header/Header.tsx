@@ -6,7 +6,7 @@ import styles from "./header.module.scss";
 
 interface HeaderProps {
   isLoading: boolean;
-  onSearch: () => void;
+  onSearch: (searchString: string) => void;
   throwError: () => void;
 }
 
