@@ -1,7 +1,6 @@
 import { ReactElement, useEffect, useState, MouseEvent } from "react";
 import { useSearchParams, Outlet, useNavigate, useParams } from "react-router-dom";
 import { Header } from "../../components/Header";
-import { Message } from "../../components/Message";
 import { SearchResults } from "../../components/SearchResults";
 import { Pagination } from "../../components/Pagination";
 import { useFetchPokemon, useDetailsContext, useMaxPage } from "../../hooks";
@@ -77,13 +76,8 @@ function Home(): ReactElement {
     >
       <section className={classnames(styles.page__column, styles.page__results, "page__results")}>
         <Header isLoading={isLoading} onSearch={handleSearch} throwError={handleThrowError} />
-
         <Pagination isLoading={isLoading} maxPage={maxPage} />
-
-        {error && <Message message={error} />}
-        {isLoading && <Message message="Loading..." />}
-
-        {!error && !isLoading && <SearchResults searchResults={searchResults} />}
+        <SearchResults searchResults={searchResults} isLoading={isLoading} error={error} />
       </section>
 
       {selectedItem && (
