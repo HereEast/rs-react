@@ -40,7 +40,7 @@ export function useFetchPokemon(): IUseFetchPokemon {
     setError("");
 
     try {
-      const results = await fetchAllPokemon(searchParams.toString());
+      const { results } = await fetchAllPokemon(searchParams.toString());
       setSearchResults(results);
     } catch (error) {
       if (error instanceof Error) {
@@ -53,3 +53,25 @@ export function useFetchPokemon(): IUseFetchPokemon {
 
   return { isLoading, searchResults, getPokemon, getAllPokemon, error, setError };
 }
+
+// export function useFetching(callback): IUseFetchPokemon {
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [error, setError] = useState("");
+
+//   async function fetching(): Promise<void> {
+//     setIsLoading(true);
+//     setError("");
+
+//     try {
+//       await callback();
+//     } catch (error) {
+//       if (error instanceof Error) {
+//         setError("We don't have this Pokémon.");
+//       }
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   }
+
+//   return { fetching, isLoading, error };
+// }

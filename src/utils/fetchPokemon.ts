@@ -1,6 +1,11 @@
 import { BASE_URL } from "../constants";
 import { IPokemonData } from "../types/types";
 
+interface IFetchAll {
+  results: IPokemonData[];
+  count: string;
+}
+
 export async function fetchPokemon(searchString: string): Promise<IPokemonData[]> {
   const URL = `${BASE_URL}${searchString}`;
 
@@ -18,7 +23,7 @@ export async function fetchPokemon(searchString: string): Promise<IPokemonData[]
   ];
 }
 
-export async function fetchAllPokemon(queryString: string): Promise<IPokemonData[]> {
+export async function fetchAllPokemon(queryString: string): Promise<IFetchAll> {
   const URL = `${BASE_URL}?${queryString}`;
 
   const response = await fetch(URL);
@@ -30,5 +35,5 @@ export async function fetchAllPokemon(queryString: string): Promise<IPokemonData
   });
 
   const results = await Promise.all(pokemonDataPromises);
-  return results;
+  return { results: results, count: String(data.count) };
 }
