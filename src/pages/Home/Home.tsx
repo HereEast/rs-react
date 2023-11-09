@@ -16,8 +16,8 @@ function Home(): ReactElement {
   const { details } = useParams();
 
   const { selectedItem, setSelectedItem } = useDetailsContext();
-  const { maxPage, getMaxPage } = useMaxPage();
   const { getPokemon, getAllPokemon, searchResults, isLoading, error } = useFetchPokemon();
+  const { maxPage, getMaxPage } = useMaxPage();
 
   const [searchParams, setSearchParams] = useSearchParams(INIT_PARAMS);
   const [isError, setIsError] = useState(false);
@@ -30,8 +30,6 @@ function Home(): ReactElement {
     } else {
       const limit = parseInt(searchParams.get("limit") || LIMIT, 10);
       const page = parseInt(searchParams.get("offset") || MIN_COUNT, 10);
-
-      console.log(page);
 
       setSearchParams({ limit: String(limit), offset: String(page) });
     }
