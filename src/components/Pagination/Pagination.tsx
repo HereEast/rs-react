@@ -2,7 +2,7 @@ import { ChangeEvent, MouseEvent, ReactElement, useState, useEffect } from "reac
 import { useSearchParams } from "react-router-dom";
 import { Button } from "../Button";
 import { getSearchParam, getMaxPage, setLocalStorage } from "../../utils";
-import { RANGE_OPTIONS, MIN_COUNT, INIT_PARAMS } from "../../constants";
+import { RANGE_OPTIONS, MIN_PAGE, INIT_PARAMS } from "../../constants";
 
 import styles from "./pagination.module.scss";
 
@@ -34,10 +34,10 @@ function Pagination({ isLoading }: PaginationProps): ReactElement {
 
     if (isPrevButton) {
       const newPage = Number(page) - 1;
-      setSearchParams({ limit: limit, offset: String(newPage) });
+      setSearchParams({ limit: limit, page: String(newPage) });
     } else {
       const newPage = Number(page) + 1;
-      setSearchParams({ limit: limit, offset: String(newPage) });
+      setSearchParams({ limit: limit, page: String(newPage) });
     }
 
     setLocalStorage("searchString", "");
@@ -50,7 +50,7 @@ function Pagination({ isLoading }: PaginationProps): ReactElement {
       return;
     }
 
-    setSearchParams({ limit: selectedOption, offset: MIN_COUNT });
+    setSearchParams({ limit: selectedOption, page: MIN_PAGE });
     setLocalStorage("searchString", "");
   }
 
@@ -67,7 +67,7 @@ function Pagination({ isLoading }: PaginationProps): ReactElement {
           name="Prev"
           className="prev"
           onClick={(e): void => handleChangePage(e)}
-          disabled={page === MIN_COUNT || isLoading}
+          disabled={page === MIN_PAGE || isLoading}
         />
         <Button
           name="Next"

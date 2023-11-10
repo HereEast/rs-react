@@ -24,7 +24,8 @@ export async function fetchPokemon(searchString: string): Promise<IPokemonData[]
 }
 
 export async function fetchAllPokemon(limit: string, page: string): Promise<IFetchAllPokemon> {
-  const URL = `${BASE_URL}?limit=${limit}&offset=${page}`;
+  const offset = (Number(page) - 1) * Number(limit);
+  const URL = `${BASE_URL}?limit=${limit}&offset=${offset}`;
 
   const response = await fetch(URL);
   const data = await response.json();

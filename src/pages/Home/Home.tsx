@@ -28,7 +28,7 @@ function Home(): ReactElement {
     if (details) {
       setSelectedItem(details.split("details-")[1]);
     } else {
-      setSearchParams({ limit: limit, offset: page });
+      setSearchParams({ limit: limit, page: page });
     }
 
     const searchString = getLocalStorage("searchString");
@@ -52,7 +52,7 @@ function Home(): ReactElement {
 
     if (e.target.closest(".page__results") && !e.target.closest(".card")) {
       setSelectedItem(null);
-      navigate(`/?limit=${limit}&offset=${page}`);
+      navigate(`/?limit=${limit}&page=${page}`);
     }
   }
 

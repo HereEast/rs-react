@@ -23,7 +23,7 @@ function Card({ name, image }: CardProps): ReactElement {
 
   function handleCardClick(): void {
     setSelectedItem(name);
-    navigate(`details-${name}?limit=${limit}&offset=${page}`);
+    navigate(`details-${name}?limit=${limit}&page=${page}`);
   }
 
   return (

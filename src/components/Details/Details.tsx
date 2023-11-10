@@ -34,7 +34,7 @@ function Details(): ReactElement {
 
   function handleClose(): void {
     setSelectedItem(null);
-    navigate(`/?limit=${limit}&offset=${page}`);
+    navigate(`/?limit=${limit}&page=${page}`);
   }
 
   return (
