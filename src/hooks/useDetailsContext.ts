@@ -13,5 +13,5 @@ export function useDetailsContext(): IDetailsContext {
     throw Error("Context error.");
   }
 
-  return { selectedItem: context.selectedItem, setSelectedItem: context.setSelectedItem };
+  return context;
 }

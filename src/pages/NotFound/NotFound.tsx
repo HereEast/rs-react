@@ -1,14 +1,13 @@
 import { ReactElement } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Message } from "../../components/Message";
 import { Button } from "../../components/Button";
 
 function NotFound(): ReactElement {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   function navigateBack(): void {
-    navigate(`/?${searchParams.toString()}`);
+    navigate("/");
     location.reload();
   }
 

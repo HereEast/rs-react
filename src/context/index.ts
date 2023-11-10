@@ -1,2 +1,1 @@
-import DetailsContext from "./context";
-export { DetailsContext };
+export * from "./context";

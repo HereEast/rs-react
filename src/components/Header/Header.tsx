@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { SearchInput } from "../SearchInput";
 import { Button } from "../Button";
 
@@ -6,11 +6,22 @@ import styles from "./header.module.scss";
 
 interface HeaderProps {
   isLoading: boolean;
-  onSearch: (searchString: string) => void;
-  throwError: () => void;
+  handleSearch: (searchString: string) => void;
 }
 
-function Header({ isLoading, onSearch, throwError }: HeaderProps): ReactElement {
+function Header({ isLoading, handleSearch }: HeaderProps): ReactElement {
+  const [thrownError, setThrownError] = useState(false);
+
+  useEffect(() => {
+    if (thrownError) {
+      throw new Error("Test error is thrown!");
+    }
+  }, [thrownError]);
+
+  function handleThrowError(): void {
+    setThrownError(true);
+  }
+
   return (
     <header className={styles.header}>
       <span className={styles.header__note}>
@@ -18,8 +29,8 @@ function Header({ isLoading, onSearch, throwError }: HeaderProps): ReactElement 
       </span>
 
       <div className={styles.header__controls}>
-        <SearchInput onSearch={onSearch} isLoading={isLoading} />
-        <Button name="Throw Error ⚡️" onClick={throwError} disabled={isLoading} />
+        <SearchInput handleSearch={handleSearch} isLoading={isLoading} />
+        <Button name="Throw Error ⚡️" onClick={handleThrowError} disabled={isLoading} />
       </div>
     </header>
   );

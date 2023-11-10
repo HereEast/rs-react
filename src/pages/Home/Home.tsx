@@ -3,57 +3,46 @@ import { useSearchParams, Outlet, useNavigate, useParams } from "react-router-do
 import { Header } from "../../components/Header";
 import { SearchResults } from "../../components/SearchResults";
 import { Pagination } from "../../components/Pagination";
-import { useFetchPokemon, useDetailsContext, useMaxPage } from "../../hooks";
-import { INIT_PARAMS, LIMIT, MIN_COUNT } from "../../constants";
+import { useFetchPokemon, useDetailsContext } from "../../hooks";
+import { getLocalStorage, getSearchParam } from "../../utils";
+import { INIT_PARAMS } from "../../constants";
+import { IPokemonData } from "../../types/types";
 
 import classnames from "classnames";
 import styles from "./home.module.scss";
 
-// Limit page and limit
-
 function Home(): ReactElement {
   const navigate = useNavigate();
-  const { details } = useParams();
 
+  const { details } = useParams();
   const { selectedItem, setSelectedItem } = useDetailsContext();
-  const { getPokemon, getAllPokemon, searchResults, isLoading, error } = useFetchPokemon();
-  const { maxPage, getMaxPage } = useMaxPage();
+  const { getPokemon, getAllPokemon, isLoading, error } = useFetchPokemon();
 
   const [searchParams, setSearchParams] = useSearchParams(INIT_PARAMS);
-  const [isError, setIsError] = useState(false);
+  const [searchResults, setSearchResults] = useState<IPokemonData[] | undefined>(undefined);
+
+  const limit = getSearchParam(searchParams, "limit");
+  const page = getSearchParam(searchParams, "page");
 
   useEffect(() => {
-    getMaxPage(searchParams);
-
     if (details) {
       setSelectedItem(details.split("details-")[1]);
     } else {
-      const limit = parseInt(searchParams.get("limit") || LIMIT, 10);
-      const page = parseInt(searchParams.get("offset") || MIN_COUNT, 10);
-
-      setSearchParams({ limit: String(limit), offset: String(page) });
+      setSearchParams({ limit: limit, offset: page });
     }
 
-    const searchString = localStorage.getItem("searchString") || "";
+    const searchString = getLocalStorage("searchString");
     handleSearch(searchString);
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (isError) {
-      throw new Error("Test error is thrown!");
-    }
-  }, [isError]);
+  }, [limit, page]);
 
   async function handleSearch(searchString: string): Promise<void> {
     if (searchString) {
-      getPokemon(searchString);
+      const pokemon = await getPokemon(searchString);
+      setSearchResults(pokemon);
     } else {
-      getAllPokemon();
+      const allPokemon = await getAllPokemon();
+      setSearchResults(allPokemon);
     }
-  }
-
-  function handleThrowError(): void {
-    setIsError(true);
   }
 
   function handleClose(e: MouseEvent): void {
@@ -63,7 +52,7 @@ function Home(): ReactElement {
 
     if (e.target.closest(".page__results") && !e.target.closest(".card")) {
       setSelectedItem(null);
-      navigate(`/?${searchParams.toString()}`);
+      navigate(`/?limit=${limit}&offset=${page}`);
     }
   }
 
@@ -73,8 +62,8 @@ function Home(): ReactElement {
       onClick={(e): void => handleClose(e)}
     >
       <section className={classnames(styles.page__column, styles.page__results, "page__results")}>
-        <Header isLoading={isLoading} onSearch={handleSearch} throwError={handleThrowError} />
-        <Pagination isLoading={isLoading} maxPage={maxPage} />
+        <Header isLoading={isLoading} handleSearch={handleSearch} />
+        <Pagination isLoading={isLoading} />
         <SearchResults searchResults={searchResults} isLoading={isLoading} error={error} />
       </section>
 

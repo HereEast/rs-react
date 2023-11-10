@@ -1,77 +1,56 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { IPokemonData } from "../types/types";
-import { fetchPokemon, fetchAllPokemon } from "../utils";
+import { fetchPokemon, fetchAllPokemon, getSearchParam } from "../utils";
+import { ERROR_POKEMON, ERROR_ALL_POKEMON } from "../constants";
 
 interface IUseFetchPokemon {
   isLoading: boolean;
-  searchResults: IPokemonData[];
   error: string;
-  setError: React.Dispatch<React.SetStateAction<string>>;
-  getPokemon: (queryString: string) => Promise<void>;
-  getAllPokemon: () => Promise<void>;
+  getPokemon: (queryString: string) => Promise<IPokemonData[] | undefined>;
+  getAllPokemon: () => Promise<IPokemonData[] | undefined>;
 }
 
 export function useFetchPokemon(): IUseFetchPokemon {
   const [searchParams] = useSearchParams();
 
-  const [searchResults, setSearchResults] = useState<IPokemonData[]>([]);
+  const page = getSearchParam(searchParams, "page");
+  const limit = getSearchParam(searchParams, "limit");
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function getPokemon(queryString: string): Promise<void> {
+  async function getPokemon(queryString: string): Promise<IPokemonData[] | undefined> {
     setIsLoading(true);
     setError("");
 
     try {
       const result = await fetchPokemon(queryString);
-      setSearchResults(result);
+      return result;
     } catch (error) {
       if (error instanceof Error) {
-        setError("We don't have this Pokémon.");
+        setError(ERROR_POKEMON);
       }
     } finally {
       setIsLoading(false);
     }
   }
 
-  async function getAllPokemon(): Promise<void> {
+  async function getAllPokemon(): Promise<IPokemonData[] | undefined> {
     setIsLoading(true);
     setError("");
 
     try {
-      const { results } = await fetchAllPokemon(searchParams.toString());
-      setSearchResults(results);
+      const { results } = await fetchAllPokemon(limit, page);
+      return results;
     } catch (error) {
       if (error instanceof Error) {
-        setError("Couldn't fetch any Pokémon. Try again.");
+        setError(ERROR_ALL_POKEMON);
       }
     } finally {
       setIsLoading(false);
     }
   }
 
-  return { isLoading, searchResults, getPokemon, getAllPokemon, error, setError };
+  return { getPokemon, getAllPokemon, isLoading, error };
 }
-
-// export function useFetching(callback): IUseFetchPokemon {
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [error, setError] = useState("");
-
-//   async function fetching(): Promise<void> {
-//     setIsLoading(true);
-//     setError("");
-
-//     try {
-//       await callback();
-//     } catch (error) {
-//       if (error instanceof Error) {
-//         setError("We don't have this Pokémon.");
-//       }
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   }
-
-//   return { fetching, isLoading, error };
-// }

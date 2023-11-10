@@ -1,18 +1,19 @@
 import { ChangeEvent, ReactElement, useEffect, useState } from "react";
 import { Button } from "../Button";
+import { getLocalStorage, setLocalStorage } from "../../utils";
 
 import styles from "./searchInput.module.scss";
 
 interface SearchInputProps {
-  onSearch: (searchString: string) => void;
+  handleSearch: (searchString: string) => void;
   isLoading: boolean;
 }
 
-function SearchInput({ onSearch, isLoading }: SearchInputProps): ReactElement {
+function SearchInput({ handleSearch, isLoading }: SearchInputProps): ReactElement {
   const [searchString, setSearchString] = useState("");
 
   useEffect(() => {
-    const savedSearchString = localStorage.getItem("searchString");
+    const savedSearchString = getLocalStorage("searchString");
     if (savedSearchString) {
       setSearchString(savedSearchString);
     }
@@ -22,11 +23,11 @@ function SearchInput({ onSearch, isLoading }: SearchInputProps): ReactElement {
     setSearchString(e.target.value);
   }
 
-  function handleSearch(): void {
+  function searchPokemon(): void {
     const searchItem = searchString.toLowerCase().trim();
 
-    onSearch(searchString);
-    localStorage.setItem("searchString", searchItem);
+    handleSearch(searchItem);
+    setLocalStorage("searchString", searchItem);
   }
 
   return (
@@ -39,7 +40,7 @@ function SearchInput({ onSearch, isLoading }: SearchInputProps): ReactElement {
         onChange={handleInputChange}
       />
 
-      <Button name="Search" onClick={handleSearch} disabled={isLoading} />
+      <Button name="Search" onClick={searchPokemon} disabled={isLoading} />
     </div>
   );
 }

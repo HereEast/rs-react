@@ -8,7 +8,7 @@ function Router(): ReactElement {
   return (
     <Routes>
       <Route path="/" element={<Home />}>
-        <Route path=":details" element={<Details />}></Route>
+        <Route path=":details" element={<Details />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
