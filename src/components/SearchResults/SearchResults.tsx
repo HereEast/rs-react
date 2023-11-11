@@ -1,18 +1,19 @@
 import { ReactElement } from "react";
 import { Card } from "../Card";
 import { Message } from "../Message";
-import { IPokemonData } from "../../types/types";
 import { LOADER__MESSAGE } from "../../constants";
 
 import styles from "./searchResults.module.scss";
+import { useAppContext } from "../../hooks";
 
 interface SearchResultsProps {
-  searchResults: IPokemonData[] | undefined;
   isLoading: boolean;
   error: string;
 }
 
-function SearchResults({ searchResults, isLoading, error }: SearchResultsProps): ReactElement {
+function SearchResults({ isLoading, error }: SearchResultsProps): ReactElement {
+  const { searchResults } = useAppContext();
+
   return (
     <>
       {error && <Message message={error} />}

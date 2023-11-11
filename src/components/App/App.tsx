@@ -2,16 +2,16 @@ import { ReactElement } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { Router } from "../../router";
 import { ErrorBoundary } from "../ErrorBoundary";
-import { DetailsProvider } from "../../context";
+import { AppContextProvider } from "../../context";
 
 function App(): ReactElement {
   return (
     <ErrorBoundary>
-      <DetailsProvider>
+      <AppContextProvider>
         <BrowserRouter>
           <Router />
         </BrowserRouter>
-      </DetailsProvider>
+      </AppContextProvider>
     </ErrorBoundary>
   );
 }

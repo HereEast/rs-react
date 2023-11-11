@@ -1,2 +1,2 @@
-export * from "./useDetailsContext";
+export * from "./useAppContext";
 export * from "./useFetchPokemon";

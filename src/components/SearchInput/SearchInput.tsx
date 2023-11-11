@@ -1,8 +1,9 @@
-import { ChangeEvent, ReactElement, useEffect, useState } from "react";
+import { ChangeEvent, ReactElement, useEffect } from "react";
 import { Button } from "../Button";
 import { getLocalStorage, setLocalStorage } from "../../utils";
 
 import styles from "./searchInput.module.scss";
+import { useAppContext } from "../../hooks";
 
 interface SearchInputProps {
   handleSearch: (searchString: string) => void;
@@ -10,7 +11,7 @@ interface SearchInputProps {
 }
 
 function SearchInput({ handleSearch, isLoading }: SearchInputProps): ReactElement {
-  const [searchString, setSearchString] = useState("");
+  const { searchString, setSearchString } = useAppContext();
 
   useEffect(() => {
     const savedSearchString = getLocalStorage("searchString");

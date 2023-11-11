@@ -1,12 +1,11 @@
-import { ReactElement, useEffect, useState, MouseEvent } from "react";
+import { ReactElement, useEffect, MouseEvent } from "react";
 import { useSearchParams, Outlet, useNavigate, useParams } from "react-router-dom";
 import { Header } from "../../components/Header";
 import { SearchResults } from "../../components/SearchResults";
 import { Pagination } from "../../components/Pagination";
-import { useFetchPokemon, useDetailsContext } from "../../hooks";
+import { useFetchPokemon, useAppContext } from "../../hooks";
 import { getLocalStorage, getSearchParam } from "../../utils";
 import { INIT_PARAMS } from "../../constants";
-import { IPokemonData } from "../../types/types";
 
 import classnames from "classnames";
 import styles from "./home.module.scss";
@@ -15,11 +14,10 @@ function Home(): ReactElement {
   const navigate = useNavigate();
 
   const { details } = useParams();
-  const { selectedItem, setSelectedItem } = useDetailsContext();
+  const { selectedItem, setSelectedItem, setSearchResults } = useAppContext();
   const { getPokemon, getAllPokemon, isLoading, error } = useFetchPokemon();
 
   const [searchParams, setSearchParams] = useSearchParams(INIT_PARAMS);
-  const [searchResults, setSearchResults] = useState<IPokemonData[] | undefined>(undefined);
 
   const limit = getSearchParam(searchParams, "limit");
   const page = getSearchParam(searchParams, "page");
@@ -31,8 +29,8 @@ function Home(): ReactElement {
       setSearchParams({ limit: limit, page: page });
     }
 
-    const searchString = getLocalStorage("searchString");
-    handleSearch(searchString);
+    const savedSearchString = getLocalStorage("searchString");
+    handleSearch(savedSearchString);
   }, [limit, page]);
 
   async function handleSearch(searchString: string): Promise<void> {
@@ -64,7 +62,7 @@ function Home(): ReactElement {
       <section className={classnames(styles.page__column, styles.page__results, "page__results")}>
         <Header isLoading={isLoading} handleSearch={handleSearch} />
         <Pagination isLoading={isLoading} />
-        <SearchResults searchResults={searchResults} isLoading={isLoading} error={error} />
+        <SearchResults isLoading={isLoading} error={error} />
       </section>
 
       {selectedItem && (

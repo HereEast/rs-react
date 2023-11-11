@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useDetailsContext } from "../../hooks";
+import { useAppContext } from "../../hooks";
 import { getSearchParam } from "../../utils";
 
 import classnames from "classnames";
@@ -15,7 +15,7 @@ interface CardProps {
 function Card({ name, image }: CardProps): ReactElement {
   const navigate = useNavigate();
 
-  const { setSelectedItem } = useDetailsContext();
+  const { setSelectedItem } = useAppContext();
   const [searchParams] = useSearchParams();
 
   const page = getSearchParam(searchParams, "page");

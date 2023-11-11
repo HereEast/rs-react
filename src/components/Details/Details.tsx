@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "../Button";
 import { Message } from "../Message";
-import { useDetailsContext, useFetchPokemon } from "../../hooks";
+import { useAppContext, useFetchPokemon } from "../../hooks";
 import { getSearchParam } from "../../utils";
 import { IPokemonData } from "../../types/types";
 import { ERROR__DETAILS } from "../../constants";
@@ -15,7 +15,7 @@ function Details(): ReactElement {
   const [searchParams] = useSearchParams();
   const [pokemon, setPokemon] = useState<IPokemonData | undefined>(undefined);
 
-  const { selectedItem, setSelectedItem } = useDetailsContext();
+  const { selectedItem, setSelectedItem } = useAppContext();
   const { getPokemon, isLoading, error } = useFetchPokemon();
 
   const page = getSearchParam(searchParams, "page");
