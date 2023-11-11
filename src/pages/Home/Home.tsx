@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, MouseEvent } from "react";
+import { ReactElement, useEffect, MouseEvent, useState } from "react";
 import { useSearchParams, Outlet, useNavigate, useParams } from "react-router-dom";
 import { Header } from "../../components/Header";
 import { SearchResults } from "../../components/SearchResults";
@@ -9,6 +9,7 @@ import { INIT_PARAMS } from "../../constants";
 
 import classnames from "classnames";
 import styles from "./home.module.scss";
+import { NotFound } from "../NotFound";
 
 function Home(): ReactElement {
   const navigate = useNavigate();
@@ -17,10 +18,17 @@ function Home(): ReactElement {
   const { selectedItem, setSelectedItem, setSearchResults } = useAppContext();
   const { getPokemon, getAllPokemon, isLoading, error } = useFetchPokemon();
 
+  const [correctPath, setCorrectPath] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams(INIT_PARAMS);
 
   const limit = getSearchParam(searchParams, "limit");
   const page = getSearchParam(searchParams, "page");
+
+  useEffect(() => {
+    if (details && details !== `details-${selectedItem}`) {
+      setCorrectPath(false);
+    }
+  }, [details, selectedItem, setCorrectPath]);
 
   useEffect(() => {
     if (details) {
@@ -55,22 +63,27 @@ function Home(): ReactElement {
   }
 
   return (
-    <div
-      className={classnames(styles.page, selectedItem ? styles.page__split : "")}
-      onClick={(e): void => handleClose(e)}
-    >
-      <section className={classnames(styles.page__column, styles.page__results, "page__results")}>
-        <Header isLoading={isLoading} handleSearch={handleSearch} />
-        <Pagination isLoading={isLoading} />
-        <SearchResults isLoading={isLoading} error={error} />
-      </section>
+    <>
+      {!correctPath && <NotFound />}
+      {correctPath && (
+        <div
+          className={classnames(styles.page, selectedItem ? styles.page__split : "")}
+          onClick={(e): void => handleClose(e)}
+        >
+          <section className={classnames(styles.page__column, styles.page__results, "page__results")}>
+            <Header isLoading={isLoading} handleSearch={handleSearch} />
+            <Pagination isLoading={isLoading} />
+            <SearchResults isLoading={isLoading} error={error} />
+          </section>
 
-      {selectedItem && (
-        <section className={classnames(styles.page__column, styles.page__details)}>
-          <Outlet />
-        </section>
+          {selectedItem && (
+            <section className={classnames(styles.page__column, styles.page__details)}>
+              <Outlet />
+            </section>
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 }
 
