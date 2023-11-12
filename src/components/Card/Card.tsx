@@ -7,7 +7,7 @@ import classnames from "classnames";
 import styles from "./card.module.scss";
 
 interface CardProps {
-  key: number;
+  key?: number;
   name: string;
   image: string;
 }
@@ -27,7 +27,7 @@ function Card({ name, image }: CardProps): ReactElement {
   }
 
   return (
-    <div className={classnames(styles.card, "card")} onClick={handleCardClick}>
+    <div className={classnames(styles.card, "card")} onClick={handleCardClick} data-testid="card">
       <div className={styles.card__image}>
         <img className={styles.image} src={image} alt={name} />
       </div>
