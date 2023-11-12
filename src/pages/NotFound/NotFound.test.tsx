@@ -5,7 +5,7 @@ import { MemoryRouter } from "react-router-dom";
 import { NotFound } from "./index";
 
 describe("NotFound page component", () => {
-  test("should render aa message and a button", () => {
+  test("should render a message and a button", () => {
     render(
       <MemoryRouter>
         <NotFound />
