@@ -5,7 +5,7 @@ import { Message } from "../Message";
 import { useAppContext, useFetchPokemon } from "../../hooks";
 import { getSearchParam } from "../../utils";
 import { IPokemonData } from "../../types/types";
-import { ERROR__DETAILS } from "../../constants";
+import { ERROR__DETAILS, LOADER__MESSAGE } from "../../constants";
 
 import styles from "./details.module.scss";
 
@@ -39,6 +39,7 @@ function Details(): ReactElement {
 
   return (
     <div className={styles.details__container}>
+      {isLoading && <Message message={LOADER__MESSAGE} />}
       {error && <Message message={ERROR__DETAILS} />}
 
       {!isLoading && !error && (
