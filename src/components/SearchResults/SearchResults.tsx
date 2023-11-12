@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
 import { Card } from "../Card";
 import { Message } from "../Message";
+import { useAppContext } from "../../hooks";
 import { LOADER__MESSAGE } from "../../constants";
 
 import styles from "./searchResults.module.scss";
-import { useAppContext } from "../../hooks";
 
 interface SearchResultsProps {
   isLoading: boolean;
