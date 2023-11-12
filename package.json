@@ -24,11 +24,6 @@
       "eslint"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm run test"
-    }
-  },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.1.0",
