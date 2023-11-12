@@ -13,7 +13,7 @@ describe("NotFound page component", () => {
     );
 
     const message = screen.getByText("Page not found (404)");
-    const button = screen.getByRole("button", { name: "Back to main" });
+    const button = screen.getByRole("button", { name: /Back to main/i });
 
     expect(message).toBeInTheDocument();
     expect(button).toBeInTheDocument();
