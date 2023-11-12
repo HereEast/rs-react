@@ -3,13 +3,13 @@ import { useSearchParams, Outlet, useNavigate, useParams } from "react-router-do
 import { Header } from "../../components/Header";
 import { SearchResults } from "../../components/SearchResults";
 import { Pagination } from "../../components/Pagination";
+import { NotFound } from "../NotFound";
 import { useFetchPokemon, useAppContext } from "../../hooks";
 import { getLocalStorage, getSearchParam } from "../../utils";
 import { INIT_PARAMS } from "../../constants";
 
 import classnames from "classnames";
 import styles from "./home.module.scss";
-import { NotFound } from "../NotFound";
 
 function Home(): ReactElement {
   const navigate = useNavigate();

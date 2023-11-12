@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactElement, useEffect } from "react";
+import { ChangeEvent, ReactElement, useLayoutEffect } from "react";
 import { Button } from "../Button";
 import { getLocalStorage, setLocalStorage } from "../../utils";
 
@@ -13,7 +13,7 @@ interface SearchInputProps {
 function SearchInput({ handleSearch, isLoading }: SearchInputProps): ReactElement {
   const { searchString, setSearchString } = useAppContext();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const savedSearchString = getLocalStorage("searchString");
     if (savedSearchString) {
       setSearchString(savedSearchString);
@@ -37,7 +37,7 @@ function SearchInput({ handleSearch, isLoading }: SearchInputProps): ReactElemen
         className={styles.search__input}
         type="text"
         value={searchString}
-        placeholder="Search Pokemon"
+        placeholder={searchString ? "" : "Search Pokemon"}
         onChange={handleInputChange}
       />
 
