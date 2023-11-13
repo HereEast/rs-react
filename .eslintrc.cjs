@@ -6,13 +6,14 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
     "plugin:prettier/recommended",
+    "plugin:testing-library/react",
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: ["./tsconfig.json", "./tsconfig.node.json"],
   },
-  plugins: ["react-refresh", "prettier"],
+  plugins: ["react-refresh", "prettier", "testing-library"],
   rules: {
     "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     semi: ["error", "always"],
