@@ -6,7 +6,7 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { ReactElement } from "react";
 import { NotFound } from "./index";
 
-describe("NotFound page component", () => {
+describe("NotFound component", () => {
   test("should display NotFound page for invalid route", () => {
     const HomePage = (): ReactElement => <div>Home page</div>;
 
