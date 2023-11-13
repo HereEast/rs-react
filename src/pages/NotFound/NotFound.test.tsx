@@ -7,20 +7,6 @@ import { ReactElement } from "react";
 import { NotFound } from "./index";
 
 describe("NotFound page component", () => {
-  test("should render a message and a button", () => {
-    render(
-      <MemoryRouter>
-        <NotFound />
-      </MemoryRouter>,
-    );
-
-    const message = screen.getByText(/Page not found/i);
-    const button = screen.getByRole("button", { name: /Back to main/i });
-
-    expect(message).toBeInTheDocument();
-    expect(button).toBeInTheDocument();
-  });
-
   test("should display NotFound page for invalid route", () => {
     const HomePage = (): ReactElement => <div>Home page</div>;
 
@@ -34,7 +20,10 @@ describe("NotFound page component", () => {
     );
 
     const message = screen.getByText(/Page not found/i);
+    const button = screen.getByRole("button", { name: /Back to main/i });
+
     expect(message).toBeInTheDocument();
+    expect(button).toBeInTheDocument();
   });
 
   test("should navigate to Home page on click on button", async () => {
