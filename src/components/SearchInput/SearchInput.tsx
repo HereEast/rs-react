@@ -1,9 +1,9 @@
 import { ChangeEvent, ReactElement, useLayoutEffect } from "react";
 import { Button } from "../Button";
 import { getLocalStorage, setLocalStorage } from "../../utils";
+import { useAppContext } from "../../hooks";
 
 import styles from "./searchInput.module.scss";
-import { useAppContext } from "../../hooks";
 
 interface SearchInputProps {
   handleSearch: (searchString: string) => void;
