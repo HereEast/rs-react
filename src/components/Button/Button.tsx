@@ -11,11 +11,7 @@ interface ButtonProps {
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
-const noop = (): void => {
-  return;
-};
-
-function Button({ name, type = "button", className, disabled, onClick = noop }: ButtonProps): ReactElement {
+function Button({ name, type = "button", className, disabled, onClick = (): void => {} }: ButtonProps): ReactElement {
   return (
     <button
       type={type}
