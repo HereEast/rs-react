@@ -1,31 +1,72 @@
 import "@testing-library/jest-dom";
 
-import { render, screen } from "@testing-library/react";
 import user from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { Pagination } from "./index";
+
+type Param = { page: string };
+type UseSearchParamsReturn = [URLSearchParams, (params: Param) => void];
+
+const mockSetSearchParams = jest.spyOn(URLSearchParams.prototype, "set");
+const mockSearchParams = new URLSearchParams("page=5");
+
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useSearchParams: (): UseSearchParamsReturn => [
+    mockSearchParams,
+    (params: Param): void => {
+      mockSearchParams.set("page", params.page);
+    },
+  ],
+}));
 
 jest.mock("../../utils/getMaxPage", () => ({
   getMaxPage: jest.fn(async () => "10"),
 }));
 
+function renderPagination(): void {
+  render(
+    <MemoryRouter>
+      <Pagination isLoading={false} />
+    </MemoryRouter>,
+  );
+}
+
 describe("Pagination component", () => {
-  test("should update page parameters in URL", async () => {
-    render(
-      <MemoryRouter initialEntries={["?page=1"]}>
-        <Pagination isLoading={false} />
-      </MemoryRouter>,
-    );
+  beforeEach(() => {
+    mockSearchParams.set("page", "5");
+  });
+
+  test("should update page parameters in URL on click on buttons", async () => {
+    renderPagination();
 
     const buttonNext = screen.getByRole("button", { name: /next/i });
-    const label = screen.getByText(/Page/i);
-
     expect(buttonNext).toBeInTheDocument();
-    expect(label).toBeInTheDocument();
-    expect(label).toHaveTextContent(/1/i);
+
+    expect(mockSearchParams.get("page")).toBe("5");
 
     await user.click(buttonNext);
 
-    expect(label).toHaveTextContent(/2/i);
+    expect(mockSetSearchParams).toHaveBeenCalled();
+    expect(mockSetSearchParams).toHaveBeenCalledWith("page", "6");
+
+    expect(mockSearchParams.get("page")).toBe("6");
+  });
+
+  test("should update page parameters in URL on click on button Prev", async () => {
+    renderPagination();
+
+    const buttonPrev = screen.getByRole("button", { name: /prev/i });
+    expect(buttonPrev).toBeInTheDocument();
+
+    expect(mockSearchParams.get("page")).toBe("5");
+
+    await user.click(buttonPrev);
+
+    expect(mockSetSearchParams).toHaveBeenCalled();
+    expect(mockSetSearchParams).toHaveBeenCalledWith("page", "4");
+
+    expect(mockSearchParams.get("page")).toBe("4");
   });
 });
