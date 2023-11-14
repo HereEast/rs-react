@@ -1,32 +1,35 @@
 import "@testing-library/jest-dom";
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { Details } from "./index";
-import { useFetchPokemon } from "../../hooks";
+import * as useFetchPokemon from "../../hooks/useFetchPokemon";
 
-interface IUseFetchPokemon {
-  getPokemon: jest.Mock;
-  getAllPokemon: jest.Mock;
-  isLoading: boolean;
-  error: string;
-}
+const mockSetSelectedItem = jest.fn();
+const mockedUsedNavigate = jest.fn();
 
 interface IContext {
   selectedItem: string;
+  setSelectedItem: jest.Mock;
 }
 
 jest.mock("../../hooks/useAppContext", () => ({
   useAppContext: (): IContext => ({
-    selectedItem: "Pokemon",
+    selectedItem: "pikachu",
+    setSelectedItem: mockSetSelectedItem,
   }),
 }));
 
-jest.mock("../../hooks/useFetchPokemon");
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: (): jest.Mock => mockedUsedNavigate,
+}));
+
+const useFetchPokemonMock = jest.spyOn(useFetchPokemon, "useFetchPokemon");
 
 describe("Details component", () => {
-  test("should show Loader when data is fetching", async () => {
-    (useFetchPokemon as jest.Mock<IUseFetchPokemon>).mockReturnValue({
+  test("should show loader when data is fetching", async () => {
+    useFetchPokemonMock.mockReturnValue({
       getPokemon: jest.fn(),
       getAllPokemon: jest.fn(),
       isLoading: true,
@@ -39,9 +42,49 @@ describe("Details component", () => {
       </MemoryRouter>,
     );
 
-    expect(useFetchPokemon).toHaveBeenCalledTimes(1);
-
     const loader = screen.getByText(/loading/i);
     expect(loader).toBeInTheDocument();
+  });
+
+  test("should show error message if failed to fetch data", async () => {
+    useFetchPokemonMock.mockReturnValue({
+      getPokemon: jest.fn(),
+      getAllPokemon: jest.fn(),
+      isLoading: false,
+      error: "Oops!.. Something wrong. Try again!",
+    });
+
+    render(
+      <MemoryRouter>
+        <Details />
+      </MemoryRouter>,
+    );
+
+    const error = screen.getByText(/Oops!.. Something wrong. Try again!/i);
+    expect(error).toBeInTheDocument();
+  });
+
+  test("should correctly display the detailed card data", async () => {
+    useFetchPokemonMock.mockReturnValue({
+      getPokemon: jest.fn(),
+      getAllPokemon: jest.fn(),
+      isLoading: false,
+      error: "",
+    });
+
+    render(
+      <MemoryRouter>
+        <Details />
+      </MemoryRouter>,
+    );
+
+    const panel = screen.getByTestId("details");
+    expect(panel).toBeInTheDocument();
+
+    const heading = await within(panel).findByRole("heading", { name: /pikachu/i });
+    // const button = within(panel).getByRole("button", { name: /close/i });
+
+    // expect(button).toBeInTheDocument();
+    expect(heading).toBeInTheDocument();
   });
 });
