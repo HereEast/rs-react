@@ -8,13 +8,13 @@ import { Card } from "./index";
 const mockSetSelectedItem = jest.fn();
 const mockedUsedNavigate = jest.fn();
 
-interface IUseAppContext {
+interface IContext {
   searchResults: { name: string; image: string }[];
   setSelectedItem: jest.Mock;
 }
 
 jest.mock("../../hooks/useAppContext", () => ({
-  useAppContext: (): IUseAppContext => ({
+  useAppContext: (): IContext => ({
     searchResults: [{ name: "pikachu", image: "pikachu.jpg" }],
     setSelectedItem: mockSetSelectedItem,
   }),
