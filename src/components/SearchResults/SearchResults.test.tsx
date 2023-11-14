@@ -55,4 +55,35 @@ describe("SearchResults component", () => {
 
     expect(errorMessage).toBeInTheDocument();
   });
+
+  test("should render the specified number of cards", () => {
+    render(
+      <MemoryRouter>
+        <SearchResults isLoading={false} error={""} />
+      </MemoryRouter>,
+    );
+
+    const card1 = screen.getByText("Card 1");
+    const card2 = screen.getByText("Card 2");
+
+    expect(card1).toBeInTheDocument();
+    expect(card2).toBeInTheDocument();
+
+    const errorMessage = screen.queryByText("Error message.");
+    const loading = screen.queryByText("Loading...");
+
+    expect(errorMessage).not.toBeInTheDocument();
+    expect(loading).not.toBeInTheDocument();
+  });
+
+  test("should render loader if isLoading is true", () => {
+    render(
+      <MemoryRouter>
+        <SearchResults isLoading={true} error={""} />
+      </MemoryRouter>,
+    );
+
+    const loading = screen.queryByText("Loading...");
+    expect(loading).toBeInTheDocument();
+  });
 });
