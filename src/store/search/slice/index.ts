@@ -6,11 +6,11 @@ export const searchStringSlice = createSlice({
     searchString: "",
   },
   reducers: {
-    setSearchString(state, action) {
+    saveSearchString(state, action) {
       state.searchString = action.payload.inputValue;
     },
   },
 });
 
-export const { setSearchString } = searchStringSlice.actions;
+export const { saveSearchString } = searchStringSlice.actions;
 export default searchStringSlice.reducer;
