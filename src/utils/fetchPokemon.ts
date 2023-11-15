@@ -1,10 +1,10 @@
 import { BASE_URL } from "../constants";
 import { IPokemonData } from "../types/types";
 
-interface IFetchAllPokemon {
-  results: IPokemonData[];
-  count: string;
-}
+// interface IFetchAllPokemon {
+//   results: IPokemonData[];
+//   count: string;
+// }
 
 export async function fetchPokemon(searchString: string): Promise<IPokemonData[]> {
   const URL = `${BASE_URL}${searchString}`;
@@ -23,7 +23,7 @@ export async function fetchPokemon(searchString: string): Promise<IPokemonData[]
   ];
 }
 
-export async function fetchAllPokemon(limit: string, page: string): Promise<IFetchAllPokemon> {
+export async function fetchAllPokemon(limit: string, page: string): Promise<IPokemonData[]> {
   const offset = (Number(page) - 1) * Number(limit);
   const URL = `${BASE_URL}?limit=${limit}&offset=${offset}`;
 
@@ -36,5 +36,5 @@ export async function fetchAllPokemon(limit: string, page: string): Promise<IFet
   });
 
   const results = await Promise.all(pokemonDataPromises);
-  return { results: results, count: String(data.count) };
+  return results;
 }
