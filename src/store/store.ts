@@ -2,11 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import searchStringReducer from "./search/slice";
 import limitReducer from "./limit/slice";
+import { pokemonReducer } from "./pokemon/slice";
 
 export const store = configureStore({
   reducer: {
     searchString: searchStringReducer,
     limit: limitReducer,
+    pokemon: pokemonReducer,
   },
 });
 
