@@ -6,11 +6,11 @@ export const limitSlice = createSlice({
     limit: "30",
   },
   reducers: {
-    changeLimit(state, action) {
-      state.limit = action.payload.limit;
+    saveLimit(state, action) {
+      state.limit = action.payload;
     },
   },
 });
 
-export const { changeLimit } = limitSlice.actions;
+export const { saveLimit } = limitSlice.actions;
 export default limitSlice.reducer;
