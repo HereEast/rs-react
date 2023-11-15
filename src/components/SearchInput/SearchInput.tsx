@@ -1,34 +1,46 @@
-import { ChangeEvent, ReactElement, useLayoutEffect } from "react";
+import { ChangeEvent, ReactElement, useLayoutEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "../Button";
-import { getLocalStorage, setLocalStorage } from "../../utils";
-import { useAppContext } from "../../hooks";
+import { getLocalStorage, setLocalStorage, getSearchParam } from "../../utils";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { saveSearchString } from "../../store/search/slice";
+import { pokemonThunk, allPokemonThunk } from "../../store/pokemon/thunk";
+import { INIT_PARAMS } from "../../constants";
 
 import styles from "./searchInput.module.scss";
 
-interface SearchInputProps {
-  handleSearch: (searchString: string) => void;
-  isLoading: boolean;
-}
+function SearchInput(): ReactElement {
+  const dispatch = useAppDispatch();
+  const { isLoading } = useAppSelector((state) => state.pokemon);
 
-function SearchInput({ handleSearch, isLoading }: SearchInputProps): ReactElement {
-  const { searchString, setSearchString } = useAppContext();
+  const [inputValue, setInputValue] = useState("");
+  const [searchParams] = useSearchParams(INIT_PARAMS);
+
+  const limit = getSearchParam(searchParams, "limit");
+  const page = getSearchParam(searchParams, "page");
 
   useLayoutEffect(() => {
     const savedSearchString = getLocalStorage("searchString");
     if (savedSearchString) {
-      setSearchString(savedSearchString);
+      setInputValue(savedSearchString);
     }
   }, []);
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
-    setSearchString(e.target.value);
+    setInputValue(e.target.value);
   }
 
-  function searchPokemon(): void {
-    const searchItem = searchString.toLowerCase().trim();
+  function handleSearchPokemon(): void {
+    const searchItem = inputValue.toLowerCase().trim();
 
-    handleSearch(searchItem);
+    if (searchItem) {
+      dispatch(pokemonThunk(searchItem));
+    } else {
+      dispatch(allPokemonThunk({ limit: limit, page: page }));
+    }
+
     setLocalStorage("searchString", searchItem);
+    dispatch(saveSearchString({ inputValue }));
   }
 
   return (
@@ -36,12 +48,12 @@ function SearchInput({ handleSearch, isLoading }: SearchInputProps): ReactElemen
       <input
         className={styles.search__input}
         type="text"
-        value={searchString}
-        placeholder={searchString ? "" : "Search Pokemon"}
+        value={inputValue}
+        placeholder="Search Pokemon"
         onChange={handleInputChange}
       />
 
-      <Button name="Search" onClick={searchPokemon} disabled={isLoading} />
+      <Button name="Search" onClick={handleSearchPokemon} disabled={isLoading} />
     </div>
   );
 }

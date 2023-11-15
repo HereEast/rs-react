@@ -4,19 +4,21 @@ import { Header } from "../../components/Header";
 import { SearchResults } from "../../components/SearchResults";
 import { Pagination } from "../../components/Pagination";
 import { NotFound } from "../NotFound";
-import { useFetchPokemon, useAppContext } from "../../hooks";
+import { useAppContext } from "../../hooks";
 import { getLocalStorage, getSearchParam } from "../../utils";
 import { INIT_PARAMS } from "../../constants";
+import { useAppDispatch } from "../../store/store";
+import { pokemonThunk, allPokemonThunk } from "../../store/pokemon/thunk";
 
 import classnames from "classnames";
 import styles from "./home.module.scss";
 
 function Home(): ReactElement {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const { details } = useParams();
-  const { selectedItem, setSelectedItem, setSearchResults } = useAppContext();
-  const { getPokemon, getAllPokemon, isLoading, error } = useFetchPokemon();
+  const { selectedItem, setSelectedItem } = useAppContext();
 
   const [correctPath, setCorrectPath] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams(INIT_PARAMS);
@@ -38,18 +40,13 @@ function Home(): ReactElement {
     }
 
     const savedSearchString = getLocalStorage("searchString");
-    handleSearch(savedSearchString);
-  }, [limit, page]);
 
-  async function handleSearch(searchString: string): Promise<void> {
-    if (searchString) {
-      const pokemon = await getPokemon(searchString);
-      setSearchResults(pokemon);
+    if (savedSearchString) {
+      dispatch(pokemonThunk(savedSearchString));
     } else {
-      const allPokemon = await getAllPokemon();
-      setSearchResults(allPokemon);
+      dispatch(allPokemonThunk({ limit: limit, page: page }));
     }
-  }
+  }, [limit, page]);
 
   function handleClose(e: MouseEvent): void {
     if (!(e.target instanceof HTMLElement) || !selectedItem) {
@@ -71,9 +68,9 @@ function Home(): ReactElement {
           onClick={(e): void => handleClose(e)}
         >
           <section className={classnames(styles.page__column, styles.page__results, "page__results")}>
-            <Header isLoading={isLoading} handleSearch={handleSearch} />
-            <Pagination isLoading={isLoading} />
-            <SearchResults isLoading={isLoading} error={error} />
+            <Header />
+            <Pagination />
+            <SearchResults />
           </section>
 
           {selectedItem && (

@@ -1,16 +1,14 @@
 import { ReactElement, useEffect, useState } from "react";
 import { SearchInput } from "../SearchInput";
 import { Button } from "../Button";
+import { useAppSelector } from "../../store/store";
 
 import styles from "./header.module.scss";
 
-interface HeaderProps {
-  isLoading: boolean;
-  handleSearch: (searchString: string) => void;
-}
-
-function Header({ isLoading, handleSearch }: HeaderProps): ReactElement {
+function Header(): ReactElement {
   const [thrownError, setThrownError] = useState(false);
+
+  const { isLoading } = useAppSelector((state) => state.pokemon);
 
   useEffect(() => {
     if (thrownError) {
@@ -29,7 +27,7 @@ function Header({ isLoading, handleSearch }: HeaderProps): ReactElement {
       </span>
 
       <div className={styles.header__controls}>
-        <SearchInput handleSearch={handleSearch} isLoading={isLoading} />
+        <SearchInput />
         <Button name="Throw Error ⚡️" onClick={handleThrowError} disabled={isLoading} />
       </div>
     </header>

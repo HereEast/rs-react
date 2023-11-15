@@ -1,18 +1,13 @@
 import { ReactElement } from "react";
 import { Card } from "../Card";
 import { Message } from "../Message";
-import { useAppContext } from "../../hooks";
+import { useAppSelector } from "../../store/store";
 import { LOADER__MESSAGE } from "../../constants";
 
 import styles from "./searchResults.module.scss";
 
-interface SearchResultsProps {
-  isLoading: boolean;
-  error: string;
-}
-
-function SearchResults({ isLoading, error }: SearchResultsProps): ReactElement {
-  const { searchResults } = useAppContext();
+function SearchResults(): ReactElement {
+  const { searchResults, error, isLoading } = useAppSelector((state) => state.pokemon);
 
   return (
     <>
@@ -21,8 +16,7 @@ function SearchResults({ isLoading, error }: SearchResultsProps): ReactElement {
 
       {!isLoading && !error && (
         <div className={styles.results}>
-          {searchResults &&
-            searchResults?.length > 0 &&
+          {searchResults?.length > 0 &&
             searchResults.map((result) => <Card key={result.id} name={result.name} image={result.image} />)}
         </div>
       )}

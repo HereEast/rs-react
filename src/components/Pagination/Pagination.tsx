@@ -3,15 +3,14 @@ import { useSearchParams } from "react-router-dom";
 import { Button } from "../Button";
 import { LimitSelect } from "../LimitSelect";
 import { getSearchParam, getMaxPage, setLocalStorage } from "../../utils";
+import { useAppSelector } from "../../store/store";
 import { MIN_PAGE, INIT_PARAMS } from "../../constants";
 
 import styles from "./pagination.module.scss";
 
-interface PaginationProps {
-  isLoading: boolean;
-}
+function Pagination(): ReactElement {
+  const { isLoading } = useAppSelector((state) => state.pokemon);
 
-function Pagination({ isLoading }: PaginationProps): ReactElement {
   const [searchParams, setSearchParams] = useSearchParams(INIT_PARAMS);
   const [maxPage, setMaxPage] = useState<string>("");
 
@@ -66,7 +65,7 @@ function Pagination({ isLoading }: PaginationProps): ReactElement {
           disabled={page === maxPage || isLoading}
         />
       </div>
-      <LimitSelect isLoading={isLoading} limit={limit} />
+      <LimitSelect />
     </div>
   );
 }

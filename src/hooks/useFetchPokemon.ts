@@ -41,7 +41,7 @@ export function useFetchPokemon(): IUseFetchPokemon {
     setError("");
 
     try {
-      const { results } = await fetchAllPokemon(limit, page);
+      const results = await fetchAllPokemon(limit, page);
       return results;
     } catch (error) {
       if (error instanceof Error) {

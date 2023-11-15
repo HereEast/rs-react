@@ -8,3 +8,11 @@ export const LOADER__MESSAGE = "Loading...";
 export const ERROR_POKEMON = "We don't have this Pokémon.";
 export const ERROR_ALL_POKEMON = "Couldn't fetch any Pokémon. Try again.";
 export const ERROR__DETAILS = "Oops!.. Something wrong. Try again!";
+
+export const initialPokemonData = {
+  id: 1,
+  name: "",
+  weight: 10,
+  height: 20,
+  image: "",
+};
