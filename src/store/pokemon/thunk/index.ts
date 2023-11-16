@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchAllPokemon, fetchPokemon } from "../../../utils";
+import { fetchAllPokemon, fetchPokemon, getError } from "../../../utils";
 
 export interface IAllPokemonThunkProps {
   limit: string;
@@ -10,8 +10,8 @@ export const pokemonThunk = createAsyncThunk("pokemon/getPokemon", async (pokemo
   try {
     const result = await fetchPokemon(pokemonName);
     return result;
-  } catch (err) {
-    return rejectWithValue(err);
+  } catch (error) {
+    return rejectWithValue(getError(error));
   }
 });
 
@@ -21,8 +21,8 @@ export const allPokemonThunk = createAsyncThunk(
     try {
       const result = await fetchAllPokemon(limit, page);
       return result;
-    } catch (err) {
-      return rejectWithValue(err);
+    } catch (error) {
+      return rejectWithValue(getError(error));
     }
   },
 );
