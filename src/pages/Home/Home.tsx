@@ -1,14 +1,14 @@
-import { ReactElement, useEffect, MouseEvent, useState } from "react";
+import { ReactElement, useEffect, useLayoutEffect, MouseEvent, useState } from "react";
 import { useSearchParams, Outlet, useNavigate, useParams } from "react-router-dom";
 import { Header } from "../../components/Header";
 import { SearchResults } from "../../components/SearchResults";
 import { Pagination } from "../../components/Pagination";
 import { NotFound } from "../NotFound";
 import { useAppContext } from "../../hooks";
-import { getLocalStorage, getSearchParam } from "../../utils";
-import { INIT_PARAMS } from "../../constants";
 import { useAppDispatch } from "../../store/store";
 import { pokemonThunk, allPokemonThunk } from "../../store/pokemon/thunk";
+import { getLocalStorage, getSearchParam } from "../../utils";
+import { INIT_PARAMS } from "../../constants";
 
 import classnames from "classnames";
 import styles from "./home.module.scss";
@@ -26,18 +26,19 @@ function Home(): ReactElement {
   const limit = getSearchParam(searchParams, "limit");
   const page = getSearchParam(searchParams, "page");
 
-  useEffect(() => {
-    if (details && details !== `details-${selectedItem}`) {
+  useLayoutEffect(() => {
+    if (details && details.split("-")[0] !== "details") {
       setCorrectPath(false);
     }
-  }, [details, selectedItem, setCorrectPath]);
+
+    if (details && details.split("-")[0] === "details") {
+      setSelectedItem(details.split("details-")[1]);
+      setCorrectPath(true);
+    }
+  }, [details, setSelectedItem]);
 
   useEffect(() => {
-    if (details) {
-      setSelectedItem(details.split("details-")[1]);
-    } else {
-      setSearchParams({ limit: limit, page: page });
-    }
+    setSearchParams({ limit: limit, page: page });
 
     const savedSearchString = getLocalStorage("searchString");
 
@@ -54,7 +55,7 @@ function Home(): ReactElement {
     }
 
     if (e.target.closest(".page__results") && !e.target.closest(".card")) {
-      setSelectedItem(null);
+      setSelectedItem("");
       navigate(`/?limit=${limit}&page=${page}`);
     }
   }
