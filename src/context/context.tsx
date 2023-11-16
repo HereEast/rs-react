@@ -2,10 +2,10 @@ import { createContext, Dispatch, ReactElement, ReactNode, useState } from "reac
 import { IPokemonData } from "../types/types";
 
 interface AppContextProps {
-  selectedItem: string | null;
+  selectedItem: string;
   searchString: string;
   searchResults: IPokemonData[] | undefined;
-  setSelectedItem: Dispatch<React.SetStateAction<string | null>>;
+  setSelectedItem: Dispatch<React.SetStateAction<string>>;
   setSearchString: Dispatch<React.SetStateAction<string>>;
   setSearchResults: Dispatch<React.SetStateAction<IPokemonData[] | undefined>>;
 }
@@ -17,7 +17,7 @@ type AppContextProviderProps = {
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 
 export function AppContextProvider({ children }: AppContextProviderProps): ReactElement {
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] = useState<string>("");
   const [searchString, setSearchString] = useState("");
   const [searchResults, setSearchResults] = useState<IPokemonData[] | undefined>(undefined);
 

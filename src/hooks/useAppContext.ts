@@ -3,10 +3,10 @@ import { AppContext } from "../context";
 import { IPokemonData } from "../types/types";
 
 interface IAppContext {
-  selectedItem: string | null;
+  selectedItem: string;
   searchString: string;
   searchResults: IPokemonData[] | undefined;
-  setSelectedItem: Dispatch<React.SetStateAction<string | null>>;
+  setSelectedItem: Dispatch<React.SetStateAction<string>>;
   setSearchString: Dispatch<React.SetStateAction<string>>;
   setSearchResults: Dispatch<React.SetStateAction<IPokemonData[] | undefined>>;
 }
