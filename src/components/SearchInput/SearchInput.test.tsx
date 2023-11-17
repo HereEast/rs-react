@@ -1,68 +1,162 @@
 import "@testing-library/jest-dom";
 
-import { render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
 import user from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { SearchInput } from "./index";
+import { AppContext } from "../../context";
 
-jest.mock("../../hooks/useAppContext", () => ({
-  useAppContext: jest.fn(() => ({
-    searchString: "",
+const mockSetItem = jest.spyOn(Storage.prototype, "setItem");
+const mockGetItem = jest.spyOn(Storage.prototype, "getItem");
+
+const handleSearchMock = jest.fn();
+
+function renderSearchInput(isLoading = false, searchString = "pikachu"): void {
+  const context = {
+    searchString: searchString,
     setSearchString: jest.fn(),
-  })),
-}));
+    selectedItem: "",
+    setSelectedItem: jest.fn(),
+    searchResults: [],
+    setSearchResults: jest.fn(),
+  };
 
-const mockGetItem = jest.fn();
-const mockSetItem = jest.fn();
-
-Object.defineProperty(window, "localStorage", {
-  value: {
-    getItem: (...args: string[]) => mockGetItem(...args),
-    setItem: (...args: string[]) => mockSetItem(...args),
-  },
-});
+  render(
+    <AppContext.Provider value={context}>
+      <MemoryRouter>
+        <SearchInput handleSearch={handleSearchMock} isLoading={isLoading} />
+      </MemoryRouter>
+    </AppContext.Provider>,
+  );
+}
 
 describe("SearchInput component", () => {
+  beforeEach(() => {
+    mockSetItem.mockClear();
+    mockGetItem.mockClear();
+    handleSearchMock.mockClear();
+    localStorage.clear();
+  });
+
+  test("should render an input and a button", () => {
+    renderSearchInput();
+
+    const inputElement = screen.getByRole("textbox");
+    const button = screen.getByRole("button", { name: /search/i });
+
+    expect(inputElement).toBeInTheDocument();
+    expect(button).toBeInTheDocument();
+    expect(button).toBeEnabled();
+  });
+
   test("should save entered value to local storage on button click", async () => {
-    const handleSearchMock = jest.fn();
+    renderSearchInput();
 
-    render(
-      <MemoryRouter>
-        <SearchInput handleSearch={handleSearchMock} isLoading={false} />
-      </MemoryRouter>,
-    );
-
-    const inputElement = screen.getByPlaceholderText("Search Pokemon");
-
-    user.click(inputElement);
-    user.keyboard("pikachu");
+    const inputElement: HTMLInputElement = screen.getByRole("textbox");
+    await user.type(inputElement, "pikachu");
 
     const searchButton = screen.getByRole("button", { name: /search/i });
     await user.click(searchButton);
 
-    expect(mockSetItem).toHaveBeenCalled();
+    expect(handleSearchMock).toHaveBeenCalled();
 
-    waitFor(() => {
-      expect(localStorage.getItem("searchString")).toEqual("pikachu");
-    });
+    expect(mockSetItem).toHaveBeenCalledTimes(1);
+    expect(mockSetItem).toHaveBeenCalledWith("searchString", "pikachu");
   });
 
-  test("retrieves value from local storage upon mounting", async () => {
-    const handleSearchMock = jest.fn();
-
+  test("should get value from the local storage upon mounting", async () => {
     localStorage.setItem("searchString", "pikachu");
 
-    render(
-      <MemoryRouter>
-        <SearchInput handleSearch={handleSearchMock} isLoading={false} />
-      </MemoryRouter>,
-    );
+    renderSearchInput();
 
     expect(mockGetItem).toHaveBeenCalled();
     expect(mockGetItem).toHaveBeenCalledWith("searchString");
 
-    waitFor(() => {
-      expect(screen.getByText("pikachu")).toBeInTheDocument();
-    });
+    const inputElement: HTMLInputElement = screen.getByRole("textbox");
+
+    expect(inputElement).toBeInTheDocument();
+    expect(inputElement.value).toBe("pikachu");
+    expect(inputElement.placeholder).toBe("");
+  });
+
+  test("should render empty input with placeholder if searchString is empty", async () => {
+    localStorage.setItem("searchString", "");
+
+    renderSearchInput(false, "");
+
+    const inputElement: HTMLInputElement = screen.getByRole("textbox");
+
+    expect(inputElement).toBeInTheDocument();
+    expect(inputElement.value).toBe("");
+    expect(inputElement.placeholder).toBe("Search Pokemon");
   });
 });
+
+// import "@testing-library/jest-dom";
+
+// import { render, screen, waitFor } from "@testing-library/react";
+// import { MemoryRouter } from "react-router-dom";
+// import user from "@testing-library/user-event";
+// import { SearchInput } from "./index";
+
+// jest.mock("../../hooks/useAppContext", () => ({
+//   useAppContext: jest.fn(() => ({
+//     searchString: "",
+//     setSearchString: jest.fn(),
+//   })),
+// }));
+
+// const mockGetItem = jest.fn();
+// const mockSetItem = jest.fn();
+
+// Object.defineProperty(window, "localStorage", {
+//   value: {
+//     getItem: (...args: string[]) => mockGetItem(...args),
+//     setItem: (...args: string[]) => mockSetItem(...args),
+//   },
+// });
+
+// describe("SearchInput component", () => {
+//   test("should save entered value to local storage on button click", async () => {
+//     const handleSearchMock = jest.fn();
+
+//     render(
+//       <MemoryRouter>
+//         <SearchInput handleSearch={handleSearchMock} isLoading={false} />
+//       </MemoryRouter>,
+//     );
+
+//     const inputElement = screen.getByPlaceholderText("Search Pokemon");
+
+//     user.click(inputElement);
+//     user.keyboard("pikachu");
+
+//     const searchButton = screen.getByRole("button", { name: /search/i });
+//     await user.click(searchButton);
+
+//     expect(mockSetItem).toHaveBeenCalled();
+
+//     waitFor(() => {
+//       expect(localStorage.getItem("searchString")).toEqual("pikachu");
+//     });
+//   });
+
+//   test("retrieves value from local storage upon mounting", async () => {
+//     const handleSearchMock = jest.fn();
+
+//     localStorage.setItem("searchString", "pikachu");
+
+//     render(
+//       <MemoryRouter>
+//         <SearchInput handleSearch={handleSearchMock} isLoading={false} />
+//       </MemoryRouter>,
+//     );
+
+//     expect(mockGetItem).toHaveBeenCalled();
+//     expect(mockGetItem).toHaveBeenCalledWith("searchString");
+
+//     waitFor(() => {
+//       expect(screen.getByText("pikachu")).toBeInTheDocument();
+//     });
+//   });
+// });

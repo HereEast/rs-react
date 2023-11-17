@@ -38,7 +38,7 @@ function Details(): ReactElement {
   }
 
   return (
-    <div className={styles.details__container}>
+    <div className={styles.details__container} data-testid="details">
       {isLoading && <Message message={LOADER__MESSAGE} />}
       {error && <Message message={ERROR__DETAILS} />}
 
