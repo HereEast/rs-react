@@ -48,6 +48,7 @@ function Home(): ReactElement {
       dispatch(allPokemonThunk({ limit: limit, page: page }));
     }
   }, [limit, page]);
+  //
 
   function handleClose(e: MouseEvent): void {
     if (!(e.target instanceof HTMLElement) || !selectedItem) {

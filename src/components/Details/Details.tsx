@@ -1,10 +1,11 @@
-import { ReactElement, useEffect } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "../Button";
 import { Message } from "../Message";
 import { useAppContext } from "../../hooks";
-import { getSearchParam } from "../../utils";
-import { useLazyGetPokemonQuery } from "../../store/api";
+import { useGetPokemonQuery } from "../../store/query";
+import { getSearchParam, parseData } from "../../utils";
+import { IPokemonData } from "../../types/types";
 import { ERROR__DETAILS, LOADER__MESSAGE } from "../../constants";
 
 import styles from "./details.module.scss";
@@ -13,30 +14,20 @@ function Details(): ReactElement {
   const navigate = useNavigate();
 
   const { selectedItem, setSelectedItem } = useAppContext();
+  const { data, isLoading, isSuccess, isError } = useGetPokemonQuery(selectedItem);
 
-  // const [pokemon, setPokemon] = useState<IPokemonData | undefined>(undefined);
-  const [triggerGetPokemon, { data: pokemon, isLoading, isError }] = useLazyGetPokemonQuery();
+  const [pokemon, setPokemon] = useState<IPokemonData | undefined>(undefined);
   const [searchParams] = useSearchParams();
-  // const { data: pokemon, isLoading, isError } = useGetPokemonQuery(selectedItem);
-  // const { getPokemon, isLoading, error } = useFetchPokemon();
+
+  useEffect(() => {
+    if (isSuccess) {
+      const result = parseData(data);
+      setPokemon(result);
+    }
+  }, [isSuccess, data]);
 
   const page = getSearchParam(searchParams, "page");
   const limit = getSearchParam(searchParams, "limit");
-
-  useEffect(() => {
-    triggerGetPokemon(selectedItem);
-  }, [selectedItem, triggerGetPokemon]);
-
-  // useEffect(() => {
-  //   async function getPokemonDetails(selectedItem: string | null): Promise<void> {
-  //     if (selectedItem) {
-  //       const result = await getPokemon(selectedItem);
-  //       setPokemon(result ? result[0] : undefined);
-  //     }
-  //   }
-
-  //   getPokemonDetails(selectedItem);
-  // }, [selectedItem]);
 
   function handleClose(): void {
     setSelectedItem("");
@@ -52,10 +43,7 @@ function Details(): ReactElement {
         <>
           <div className={styles.details}>
             <div className={styles.details__image}>
-              <img
-                src={pokemon?.sprites.other["official-artwork"]["front_default"]}
-                alt={`Image of ${pokemon?.name.toUpperCase()}`}
-              />
+              <img src={pokemon?.image} alt={`Image of ${pokemon?.name.toUpperCase()}`} />
             </div>
             <div className={styles.details__info}>
               <h2>{pokemon?.name.toUpperCase()}</h2>
