@@ -1,0 +1,38 @@
+@import "../../styles/index.scss";
+
+.pagination {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 3rem;
+
+  &__buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  &__button {
+    padding: 0;
+    width: 3rem;
+
+    &_active {
+      background-color: #b5b5b5;
+    }
+  }
+}
+
+.pagination__buttons {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .label {
+    color: var(--black);
+    font-size: var(--text-size);
+    text-transform: uppercase;
+
+    span {
+      margin-left: 0.5rem;
+    }
+  }
+}

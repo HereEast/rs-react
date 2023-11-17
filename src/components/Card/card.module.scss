@@ -1,0 +1,46 @@
+@import "../../styles/index.scss";
+
+.card {
+  max-width: 40rem;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  background-color: var(--white);
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  font-size: 2rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  transition: all 0.2s ease-in;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &__image {
+    width: 100%;
+    margin-bottom: 1rem;
+
+    .image {
+      width: 100%;
+      height: 100%;
+      font-size: 1.4rem;
+    }
+  }
+
+  &__data {
+    display: flex;
+    flex-direction: column;
+
+    &_name {
+      font-size: 2rem;
+      text-transform: uppercase;
+      text-align: center;
+    }
+  }
+}
