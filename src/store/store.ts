@@ -3,7 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import searchStringReducer from "./search/slice";
 import limitReducer from "./limit/slice";
 import { pokemonReducer } from "./pokemon/slice";
-import { pokemonApi } from "./api";
+import { pokemonApi } from "./query";
 
 export const store = configureStore({
   reducer: {
