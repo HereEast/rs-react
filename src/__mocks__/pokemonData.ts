@@ -22,3 +22,10 @@ export const mockApiResponse: IPokemonApiResponse = {
     },
   },
 };
+
+// export const mockBasicData: { results: IPokemonBasic[] } = {
+//   results: [
+//     { name: "pikachu", url: "pikachu.png" },
+//     { name: "bulbasaur", url: "bulbasaur.png" },
+//   ],
+// };
