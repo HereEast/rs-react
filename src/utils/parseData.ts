@@ -6,7 +6,7 @@ export function parseData(data: IPokemonApiResponse): IPokemonData {
     name: data.name,
     height: data.height,
     weight: data.weight,
-    image: data.sprites.other["official-artwork"]["front_default"] || "",
+    image: data.sprites.other["official-artwork"]["front_default"],
   };
 
   return parsedData;

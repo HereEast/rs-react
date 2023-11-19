@@ -43,7 +43,7 @@ function Details(): ReactElement {
         <>
           <div className={styles.details}>
             <div className={styles.details__image}>
-              <img src={pokemon?.image} alt={`Image of ${pokemon?.name.toUpperCase()}`} />
+              <img src={pokemon?.image || ""} alt={`Image of ${pokemon?.name.toUpperCase()}`} />
             </div>
             <div className={styles.details__info}>
               <h2>{pokemon?.name.toUpperCase()}</h2>
