@@ -1,11 +1,6 @@
 import { BASE_URL } from "../constants";
 import { IPokemonData } from "../types/types";
 
-// interface IFetchAllPokemon {
-//   results: IPokemonData[];
-//   count: string;
-// }
-
 export async function fetchPokemon(searchString: string): Promise<IPokemonData[]> {
   const URL = `${BASE_URL}${searchString}`;
 
