@@ -1,34 +1,39 @@
 import "@testing-library/jest-dom";
 
 // import user from "@testing-library/user-event";
-// import { render, screen } from "@testing-library/react";
-// import { MemoryRouter } from "react-router-dom";
-// import { SearchInput } from "./index";
-// import { AppContext } from "../../context";
+import * as reduxHooks from "react-redux";
+import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import { SearchInput } from "./index";
+import { AppContext } from "../../context";
 
 // const mockSetItem = jest.spyOn(Storage.prototype, "setItem");
 // const mockGetItem = jest.spyOn(Storage.prototype, "getItem");
 
 // const handleSearchMock = jest.fn();
 
-// function renderSearchInput(isLoading = false, searchString = "pikachu"): void {
-//   const context = {
-//     searchString: searchString,
-//     setSearchString: jest.fn(),
-//     selectedItem: "",
-//     setSelectedItem: jest.fn(),
-//     searchResults: [],
-//     setSearchResults: jest.fn(),
-//   };
+function renderSearchInput(): void {
+  const context = {
+    searchString: "",
+    setSearchString: jest.fn(),
+    selectedItem: "",
+    setSelectedItem: jest.fn(),
+    searchResults: [],
+    setSearchResults: jest.fn(),
+  };
 
-//   render(
-//     <AppContext.Provider value={context}>
-//       <MemoryRouter>
-//         <SearchInput handleSearch={handleSearchMock} isLoading={isLoading} />
-//       </MemoryRouter>
-//     </AppContext.Provider>,
-//   );
-// }
+  render(
+    <AppContext.Provider value={context}>
+      <MemoryRouter>
+        <SearchInput />
+      </MemoryRouter>
+    </AppContext.Provider>,
+  );
+}
+
+jest.mock("react-redux");
+jest.spyOn(reduxHooks, "useDispatch");
+const useSelectorSpy = jest.spyOn(reduxHooks, "useSelector");
 
 describe("SearchInput component", () => {
   // beforeEach(() => {
@@ -39,15 +44,16 @@ describe("SearchInput component", () => {
   // });
 
   test("should render an input and a button", () => {
-    expect(true).toBe(true);
-    // renderSearchInput();
+    useSelectorSpy.mockReturnValueOnce({ isLoading: false });
 
-    // const inputElement = screen.getByRole("textbox");
-    // const button = screen.getByRole("button", { name: /search/i });
+    renderSearchInput();
 
-    // expect(inputElement).toBeInTheDocument();
-    // expect(button).toBeInTheDocument();
-    // expect(button).toBeEnabled();
+    const inputElement = screen.getByRole("textbox");
+    const button = screen.getByRole("button", { name: /search/i });
+
+    expect(inputElement).toBeInTheDocument();
+    expect(button).toBeInTheDocument();
+    expect(button).toBeEnabled();
   });
 
   // test("should save entered value to local storage on button click", async () => {
