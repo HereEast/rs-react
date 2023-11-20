@@ -22,10 +22,6 @@ function LimitSelect(): ReactElement {
   function handleSetLimit(e: ChangeEvent<HTMLSelectElement>): void {
     const selectedOption = e.target.value;
 
-    if (limit === selectedOption) {
-      return;
-    }
-
     dispatch(saveLimit({ limit: selectedOption }));
 
     setSearchParams({ limit: selectedOption, page: MIN_PAGE });
