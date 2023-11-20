@@ -1,90 +1,74 @@
 import "@testing-library/jest-dom";
 
-// import { render, screen } from "@testing-library/react";
-// import { MemoryRouter } from "react-router-dom";
-// import { SearchResults } from "./index";
+import * as reduxHooks from "react-redux";
+import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import { SearchResults } from "./index";
+import { AppContextProvider } from "../../context";
 
-interface ISearchResults {
-  searchResults: { name: string; image: string }[];
+const cardsMock = [
+  { name: "Card 1", image: "card1.jpg" },
+  { name: "Card 2", image: "card2.jpg" },
+];
+
+jest.mock("react-redux");
+jest.spyOn(reduxHooks, "useDispatch").mockReturnValue(jest.fn());
+
+const useSelectorMock = jest.spyOn(reduxHooks, "useSelector");
+
+function renderComponent(): void {
+  render(
+    <AppContextProvider>
+      <MemoryRouter>
+        <SearchResults />
+      </MemoryRouter>
+    </AppContextProvider>,
+  );
 }
-
-jest.mock("../../hooks/useAppContext", () => ({
-  useAppContext: (): ISearchResults => ({
-    searchResults: [
-      { name: "Card 1", image: "card1.jpg" },
-      { name: "Card 2", image: "card2.jpg" },
-    ],
-  }),
-}));
 
 describe("SearchResults component", () => {
   test("should render the specified number of cards", () => {
-    expect(true).toBe(true);
-    // render(
-    //   <MemoryRouter>
-    //     <SearchResults isLoading={false} error={""} />
-    //   </MemoryRouter>,
-    // );
+    useSelectorMock.mockReturnValue({
+      searchResults: cardsMock,
+      isLoading: false,
+      error: "",
+    });
 
-    // const card1 = screen.getByText("Card 1");
-    // const card2 = screen.getByText("Card 2");
+    renderComponent();
 
-    // expect(card1).toBeInTheDocument();
-    // expect(card2).toBeInTheDocument();
-
-    // const errorMessage = screen.queryByText("Error message.");
-    // const loading = screen.queryByText("Loading...");
-
-    // expect(errorMessage).not.toBeInTheDocument();
-    // expect(loading).not.toBeInTheDocument();
+    const cards = screen.getAllByText(/card/i);
+    expect(cards.length).toEqual(2);
   });
 
-  // test("should render an appropriate message if no cards are present", () => {
-  //   render(
-  //     <MemoryRouter>
-  //       <SearchResults isLoading={false} error={"Error message."} />
-  //     </MemoryRouter>,
-  //   );
+  test("should render an appropriate message if no cards are present", () => {
+    useSelectorMock.mockReturnValue({
+      searchResults: [],
+      isLoading: false,
+      error: "Error message.",
+    });
 
-  //   const card1 = screen.queryByText("Non-existent Card 1");
-  //   const card2 = screen.queryByText("Non-existent Card 2");
+    renderComponent();
 
-  //   expect(card1).not.toBeInTheDocument();
-  //   expect(card2).not.toBeInTheDocument();
+    const card1 = screen.queryByText("Non-existent Card 1");
+    const card2 = screen.queryByText("Non-existent Card 2");
 
-  //   const errorMessage = screen.queryByText("Error message.");
+    expect(card1).not.toBeInTheDocument();
+    expect(card2).not.toBeInTheDocument();
 
-  //   expect(errorMessage).toBeInTheDocument();
-  // });
+    const errorMessage = screen.queryByText("Error message.");
+    expect(errorMessage).toBeInTheDocument();
+  });
 
-  // test("should render the specified number of cards", () => {
-  //   render(
-  //     <MemoryRouter>
-  //       <SearchResults isLoading={false} error={""} />
-  //     </MemoryRouter>,
-  //   );
+  test("should render loader if isLoading is true", () => {
+    useSelectorMock.mockReturnValue({
+      searchResults: cardsMock,
+      isLoading: true,
+      error: "",
+    });
 
-  //   const card1 = screen.getByText("Card 1");
-  //   const card2 = screen.getByText("Card 2");
+    renderComponent();
 
-  //   expect(card1).toBeInTheDocument();
-  //   expect(card2).toBeInTheDocument();
-
-  //   const errorMessage = screen.queryByText("Error message.");
-  //   const loading = screen.queryByText("Loading...");
-
-  //   expect(errorMessage).not.toBeInTheDocument();
-  //   expect(loading).not.toBeInTheDocument();
-  // });
-
-  // test("should render loader if isLoading is true", () => {
-  //   render(
-  //     <MemoryRouter>
-  //       <SearchResults isLoading={true} error={""} />
-  //     </MemoryRouter>,
-  //   );
-
-  //   const loading = screen.queryByText("Loading...");
-  //   expect(loading).toBeInTheDocument();
-  // });
+    const loading = screen.queryByText("Loading...");
+    expect(loading).toBeInTheDocument();
+  });
 });
