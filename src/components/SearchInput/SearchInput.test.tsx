@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom";
 
 import * as reduxHooks from "react-redux";
+import * as actions from "../../store/search/slice";
 import user from "@testing-library/user-event";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
@@ -10,7 +11,9 @@ import { contextMock } from "../../__mocks__/contextMock";
 
 jest.mock("react-redux");
 
-jest.spyOn(reduxHooks, "useDispatch").mockReturnValue(jest.fn());
+const mockedDispatch = jest.spyOn(reduxHooks, "useDispatch") as jest.Mock;
+const mockedSaveString = jest.spyOn(actions, "saveSearchString") as jest.Mock;
+
 jest.spyOn(reduxHooks, "useSelector").mockReturnValue({ isLoading: false });
 
 const mockSetItem = jest.spyOn(Storage.prototype, "setItem");
@@ -30,7 +33,25 @@ describe("SearchInput component", () => {
   beforeEach(() => {
     mockSetItem.mockClear();
     mockGetItem.mockClear();
+    mockedDispatch.mockClear();
+    mockedSaveString.mockClear();
     localStorage.clear();
+  });
+
+  test("should call dispatch with inputValue when there is input value", async () => {
+    const dispatch = jest.fn();
+    mockedDispatch.mockReturnValue(dispatch);
+
+    renderSearchInput();
+
+    const inputElement: HTMLInputElement = screen.getByRole("textbox");
+    await user.type(inputElement, "pikachu");
+
+    const searchButton = screen.getByRole("button", { name: /search/i });
+    await user.click(searchButton);
+
+    expect(dispatch).toHaveBeenCalled();
+    expect(mockedSaveString).toHaveBeenCalledWith({ inputValue: "pikachu" });
   });
 
   test("should render an input and a button", () => {
