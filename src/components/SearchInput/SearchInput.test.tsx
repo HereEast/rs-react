@@ -10,11 +10,11 @@ import { contextMock } from "../../__mocks__/contextMock";
 
 jest.mock("react-redux");
 
-const mockSetItem = jest.spyOn(Storage.prototype, "setItem");
-const mockGetItem = jest.spyOn(Storage.prototype, "getItem");
-
 jest.spyOn(reduxHooks, "useDispatch").mockReturnValue(jest.fn());
 jest.spyOn(reduxHooks, "useSelector").mockReturnValue({ isLoading: false });
+
+const mockSetItem = jest.spyOn(Storage.prototype, "setItem");
+const mockGetItem = jest.spyOn(Storage.prototype, "getItem");
 
 function renderSearchInput(): void {
   render(
