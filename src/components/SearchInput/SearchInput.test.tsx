@@ -1,21 +1,22 @@
 import "@testing-library/jest-dom";
 
-// import user from "@testing-library/user-event";
 import * as reduxHooks from "react-redux";
+import user from "@testing-library/user-event";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { SearchInput } from "./index";
 import { AppContext } from "../../context";
 
-// const mockSetItem = jest.spyOn(Storage.prototype, "setItem");
-// const mockGetItem = jest.spyOn(Storage.prototype, "getItem");
+jest.mock("react-redux");
 
-// const handleSearchMock = jest.fn();
+const mockSetItem = jest.spyOn(Storage.prototype, "setItem");
+const mockGetItem = jest.spyOn(Storage.prototype, "getItem");
+
+jest.spyOn(reduxHooks, "useDispatch").mockReturnValue(jest.fn());
+jest.spyOn(reduxHooks, "useSelector").mockReturnValue({ isLoading: false });
 
 function renderSearchInput(): void {
   const context = {
-    searchString: "",
-    setSearchString: jest.fn(),
     selectedItem: "",
     setSelectedItem: jest.fn(),
     searchResults: [],
@@ -31,21 +32,14 @@ function renderSearchInput(): void {
   );
 }
 
-jest.mock("react-redux");
-jest.spyOn(reduxHooks, "useDispatch");
-const useSelectorSpy = jest.spyOn(reduxHooks, "useSelector");
-
 describe("SearchInput component", () => {
-  // beforeEach(() => {
-  //   mockSetItem.mockClear();
-  //   mockGetItem.mockClear();
-  //   handleSearchMock.mockClear();
-  //   localStorage.clear();
-  // });
+  beforeEach(() => {
+    mockSetItem.mockClear();
+    mockGetItem.mockClear();
+    localStorage.clear();
+  });
 
   test("should render an input and a button", () => {
-    useSelectorSpy.mockReturnValueOnce({ isLoading: false });
-
     renderSearchInput();
 
     const inputElement = screen.getByRole("textbox");
@@ -56,45 +50,42 @@ describe("SearchInput component", () => {
     expect(button).toBeEnabled();
   });
 
-  // test("should save entered value to local storage on button click", async () => {
-  //   renderSearchInput();
+  test("should save entered value to local storage on button click", async () => {
+    renderSearchInput();
 
-  //   const inputElement: HTMLInputElement = screen.getByRole("textbox");
-  //   await user.type(inputElement, "pikachu");
+    const inputElement: HTMLInputElement = screen.getByRole("textbox");
+    await user.type(inputElement, "pikachu");
 
-  //   const searchButton = screen.getByRole("button", { name: /search/i });
-  //   await user.click(searchButton);
+    const searchButton = screen.getByRole("button", { name: /search/i });
+    await user.click(searchButton);
 
-  //   expect(handleSearchMock).toHaveBeenCalled();
+    expect(mockSetItem).toHaveBeenCalledTimes(1);
+    expect(mockSetItem).toHaveBeenCalledWith("searchString", "pikachu");
+  });
 
-  //   expect(mockSetItem).toHaveBeenCalledTimes(1);
-  //   expect(mockSetItem).toHaveBeenCalledWith("searchString", "pikachu");
-  // });
+  test("should get value from the local storage upon mounting", async () => {
+    localStorage.setItem("searchString", "pikachu");
 
-  // test("should get value from the local storage upon mounting", async () => {
-  //   localStorage.setItem("searchString", "pikachu");
+    renderSearchInput();
 
-  //   renderSearchInput();
+    expect(mockGetItem).toHaveBeenCalled();
+    expect(mockGetItem).toHaveBeenCalledWith("searchString");
 
-  //   expect(mockGetItem).toHaveBeenCalled();
-  //   expect(mockGetItem).toHaveBeenCalledWith("searchString");
+    const inputElement: HTMLInputElement = screen.getByRole("textbox");
 
-  //   const inputElement: HTMLInputElement = screen.getByRole("textbox");
+    expect(inputElement).toBeInTheDocument();
+    expect(inputElement.value).toBe("pikachu");
+  });
 
-  //   expect(inputElement).toBeInTheDocument();
-  //   expect(inputElement.value).toBe("pikachu");
-  //   expect(inputElement.placeholder).toBe("");
-  // });
+  test("should render empty input with placeholder if searchString is empty", async () => {
+    localStorage.setItem("searchString", "");
 
-  // test("should render empty input with placeholder if searchString is empty", async () => {
-  //   localStorage.setItem("searchString", "");
+    renderSearchInput();
 
-  //   renderSearchInput(false, "");
+    const inputElement: HTMLInputElement = screen.getByRole("textbox");
 
-  //   const inputElement: HTMLInputElement = screen.getByRole("textbox");
-
-  //   expect(inputElement).toBeInTheDocument();
-  //   expect(inputElement.value).toBe("");
-  //   expect(inputElement.placeholder).toBe("Search Pokemon");
-  // });
+    expect(inputElement).toBeInTheDocument();
+    expect(inputElement.value).toBe("");
+    expect(inputElement.placeholder).toBe("Search Pokemon");
+  });
 });
