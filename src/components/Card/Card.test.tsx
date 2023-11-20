@@ -34,6 +34,20 @@ function renderCard(): void {
 }
 
 describe("Card component", () => {
+  test("should render the relevant card data when there is no image src", () => {
+    render(
+      <MemoryRouter>
+        <Card name="pikachu" image={null} />
+      </MemoryRouter>,
+    );
+
+    const card = screen.getByTestId("card");
+    const cardImage = screen.queryByRole("img", { name: /pikachu/i });
+
+    expect(card).toBeInTheDocument();
+    expect(cardImage).not.toBeInTheDocument();
+  });
+
   test("should render the relevant card data", () => {
     renderCard();
 

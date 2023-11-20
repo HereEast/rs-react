@@ -17,7 +17,7 @@ function SearchResults(): ReactElement {
       {!isLoading && !error && (
         <div className={styles.results}>
           {searchResults?.length > 0 &&
-            searchResults.map((result) => <Card key={result.id} name={result.name} image={result.image || ""} />)}
+            searchResults.map((result) => <Card key={result.id} name={result.name} image={result.image} />)}
         </div>
       )}
     </>

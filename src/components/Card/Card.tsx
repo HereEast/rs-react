@@ -9,7 +9,7 @@ import styles from "./card.module.scss";
 interface CardProps {
   key?: number;
   name: string;
-  image: string;
+  image: string | null;
 }
 
 function Card({ name, image }: CardProps): ReactElement {
@@ -29,7 +29,11 @@ function Card({ name, image }: CardProps): ReactElement {
   return (
     <div className={classnames(styles.card, "card")} onClick={handleCardClick} data-testid="card">
       <div className={styles.card__image}>
-        <img className={styles.image} src={image} alt={name} />
+        <img
+          className={styles.image}
+          src={image || ""}
+          alt={image ? `Image of ${name.toUpperCase()}` : "Image is not available."}
+        />
       </div>
       <div className={styles.card__data}>
         <h3 className={styles.card__data_name}>{name.replace(/-/gi, " ")}</h3>
