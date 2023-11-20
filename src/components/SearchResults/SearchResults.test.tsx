@@ -40,6 +40,22 @@ describe("SearchResults component", () => {
     expect(cards.length).toEqual(2);
   });
 
+  test("should render proper data on cards", async () => {
+    useSelectorMock.mockReturnValue({
+      searchResults: cardsMock,
+      isLoading: false,
+      error: "",
+    });
+
+    renderComponent();
+
+    const card1 = screen.getByText(/card 1/i);
+    const card2 = screen.getByText(/card 2/i);
+
+    expect(card1).toBeInTheDocument();
+    expect(card2).toBeInTheDocument();
+  });
+
   test("should render an appropriate message if no cards are present", () => {
     useSelectorMock.mockReturnValue({
       searchResults: [],
