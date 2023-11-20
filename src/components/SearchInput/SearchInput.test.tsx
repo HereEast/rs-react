@@ -6,6 +6,7 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { SearchInput } from "./index";
 import { AppContext } from "../../context";
+import { contextMock } from "../../__mocks__/contextMock";
 
 jest.mock("react-redux");
 
@@ -16,15 +17,8 @@ jest.spyOn(reduxHooks, "useDispatch").mockReturnValue(jest.fn());
 jest.spyOn(reduxHooks, "useSelector").mockReturnValue({ isLoading: false });
 
 function renderSearchInput(): void {
-  const context = {
-    selectedItem: "",
-    setSelectedItem: jest.fn(),
-    searchResults: [],
-    setSearchResults: jest.fn(),
-  };
-
   render(
-    <AppContext.Provider value={context}>
+    <AppContext.Provider value={contextMock}>
       <MemoryRouter>
         <SearchInput />
       </MemoryRouter>
