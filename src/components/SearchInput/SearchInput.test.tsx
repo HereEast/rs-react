@@ -3,7 +3,7 @@ import "@testing-library/jest-dom";
 import * as reduxHooks from "react-redux";
 import * as actions from "../../store/search/slice";
 import user from "@testing-library/user-event";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { SearchInput } from "./index";
 import { AppContext } from "../../context";
@@ -36,6 +36,23 @@ describe("SearchInput component", () => {
     mockedDispatch.mockClear();
     mockedSaveString.mockClear();
     localStorage.clear();
+  });
+
+  test("should call dispatch when there is no input value", async () => {
+    const dispatch = jest.fn();
+    mockedDispatch.mockReturnValue(dispatch);
+
+    renderSearchInput();
+
+    const inputElement: HTMLInputElement = screen.getByRole("textbox");
+    expect(inputElement).toHaveValue("");
+
+    const searchButton = screen.getByRole("button", { name: /search/i });
+    await user.click(searchButton);
+
+    await waitFor(() => {
+      expect(dispatch).toHaveBeenCalled();
+    });
   });
 
   test("should call dispatch with inputValue when there is input value", async () => {
