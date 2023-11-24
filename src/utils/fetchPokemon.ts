@@ -13,7 +13,7 @@ export async function fetchPokemon(searchString: string): Promise<IPokemonData[]
       name: data.name,
       height: data.height,
       weight: data.weight,
-      image: data.sprites.other["official-artwork"]["front_default"] || "",
+      image: data.sprites.other["official-artwork"]["front_default"],
     },
   ];
 }
