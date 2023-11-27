@@ -1,0 +1,30 @@
+@import "../../styles/index.scss";
+
+.button {
+  display: inline-block;
+  width: fit-content;
+  height: 3rem;
+  padding: 0 1rem;
+  padding-bottom: 2px;
+  background-color: #e3e3e3;
+  border: 1px solid #5b5b5b;
+  border-radius: 2px;
+  font-size: var(--text-size);
+  text-transform: uppercase;
+
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+
+  &:hover {
+    background-color: #d0d0d0;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+
+    &:hover {
+      background-color: initial;
+    }
+  }
+}

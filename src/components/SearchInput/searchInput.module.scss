@@ -1,0 +1,19 @@
+@import "../../styles/index.scss";
+
+.search {
+  display: flex;
+  gap: 1rem;
+
+  &__input {
+    height: 3rem;
+    padding: 0 1rem;
+    outline: none;
+    border: 1px solid var(--button-border);
+    border-radius: 2px;
+    color: var(--black);
+
+    &:focus {
+      border: 1px solid var(--button-border-active);
+    }
+  }
+}
