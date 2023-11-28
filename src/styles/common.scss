@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 * {
   padding: 0;
   margin: 0;
@@ -10,7 +12,7 @@ html {
 }
 
 body {
-  background-color: var(--page-back);
+  background-color: $page-back;
 }
 
 .link_button {
@@ -20,12 +22,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--button-back);
-  border: 1px solid var(--button-border);
+  background-color: $button-back;
+  border: 1px solid $button-border;
   border-radius: 2px;
 
-  color: var(--black);
-  font-size: var(--text-size);
+  color: $black;
+  font-size: $text-size;
   text-transform: uppercase;
   text-decoration: none;
 
@@ -33,6 +35,6 @@ body {
   transition: all 0.2s ease-in;
 
   &:hover {
-    background-color: var(--button-back-hover);
+    background-color: $button-back-hover;
   }
 }
