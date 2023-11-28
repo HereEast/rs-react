@@ -1,14 +1,16 @@
 import { ReactElement } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import { Message } from "../../Message";
 import { Button } from "../../Button";
 
 function NotFound(): ReactElement {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   function navigateBack(): void {
-    navigate("/");
-    location.reload();
+    router.push({
+      pathname: "/",
+      query: { limit: router.query.limit, page: router.query.page },
+    });
   }
 
   return (
