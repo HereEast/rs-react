@@ -1,12 +1,11 @@
 import { MouseEvent, ReactElement, useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import { Button } from "../Button";
 import { LimitSelect } from "../LimitSelect";
 import { getMaxPage, setLocalStorage } from "../../utils";
 import { useAppSelector } from "../../store/store";
 import { MIN_PAGE } from "../../constants";
-
-import { useRouter } from "next/router";
-import { useSearchParams } from "next/navigation";
 
 import styles from "./pagination.module.scss";
 
