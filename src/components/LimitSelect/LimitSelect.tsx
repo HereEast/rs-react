@@ -1,10 +1,9 @@
 import { ChangeEvent, ReactElement, useEffect } from "react";
+import { useRouter } from "next/router";
 import { setLocalStorage } from "../../utils";
 import { RANGE_OPTIONS, MIN_PAGE } from "../../constants";
 import { saveLimit } from "../../store/limit/slice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-
-import { useRouter } from "next/router";
 
 import styles from "./limitSelect.module.scss";
 
@@ -14,10 +13,10 @@ function LimitSelect(): ReactElement {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const limit = router.query.limit;
+  const limit = router.query.limit as string;
 
   useEffect(() => {
-    dispatch(saveLimit({ limit }));
+    dispatch(saveLimit({ limit: limit }));
   }, [limit, dispatch]);
 
   function handleSetLimit(e: ChangeEvent<HTMLSelectElement>): void {
@@ -41,9 +40,10 @@ function LimitSelect(): ReactElement {
       <label className={styles.label}>Items:</label>
       <select
         className={styles.select}
-        defaultValue={limit}
+        // defaultValue={limit}
         onChange={(e): void => handleSetLimit(e)}
         disabled={isLoading}
+        value={limit}
       >
         {RANGE_OPTIONS.map((option) => (
           <option key={option} value={option}>
