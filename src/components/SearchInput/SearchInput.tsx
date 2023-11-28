@@ -1,23 +1,24 @@
 import { ChangeEvent, ReactElement, useLayoutEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import { Button } from "../Button";
-import { getLocalStorage, setLocalStorage, getSearchParam } from "../../utils";
+import { getLocalStorage, setLocalStorage } from "../../utils";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { saveSearchString } from "../../store/search/slice";
 import { pokemonThunk, allPokemonThunk } from "../../store/pokemon/thunk";
-import { INIT_PARAMS } from "../../constants";
+
+import { useRouter } from "next/router";
 
 import styles from "./searchInput.module.scss";
 
 function SearchInput(): ReactElement {
   const dispatch = useAppDispatch();
+  const router = useRouter();
+
   const { isLoading } = useAppSelector((state) => state.pokemon);
 
   const [inputValue, setInputValue] = useState("");
-  const [searchParams] = useSearchParams(INIT_PARAMS);
 
-  const limit = getSearchParam(searchParams, "limit");
-  const page = getSearchParam(searchParams, "page");
+  const limit = router.query.limit as string;
+  const page = router.query.page as string;
 
   useLayoutEffect(() => {
     const savedSearchString = getLocalStorage("searchString");

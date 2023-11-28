@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
-import { Message } from "../../components/Message";
-import { Button } from "../../components/Button";
+import { Message } from "../../Message";
+import { Button } from "../../Button";
 
 function NotFound(): ReactElement {
   const navigate = useNavigate();

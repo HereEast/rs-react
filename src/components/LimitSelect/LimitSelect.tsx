@@ -1,19 +1,20 @@
 import { ChangeEvent, ReactElement, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import { setLocalStorage, getSearchParam } from "../../utils";
-import { RANGE_OPTIONS, MIN_PAGE, INIT_PARAMS } from "../../constants";
+import { setLocalStorage } from "../../utils";
+import { RANGE_OPTIONS, MIN_PAGE } from "../../constants";
 import { saveLimit } from "../../store/limit/slice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
+
+import { useRouter } from "next/router";
 
 import styles from "./limitSelect.module.scss";
 
 function LimitSelect(): ReactElement {
-  const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((state) => state.pokemon);
 
-  const [searchParams, setSearchParams] = useSearchParams(INIT_PARAMS);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
-  const limit = getSearchParam(searchParams, "limit");
+  const limit = router.query.limit;
 
   useEffect(() => {
     dispatch(saveLimit({ limit }));
@@ -24,7 +25,14 @@ function LimitSelect(): ReactElement {
 
     dispatch(saveLimit({ limit: selectedOption }));
 
-    setSearchParams({ limit: selectedOption, page: MIN_PAGE });
+    router.push({
+      pathname: "/",
+      query: {
+        limit: selectedOption,
+        page: MIN_PAGE,
+      },
+    });
+
     setLocalStorage("searchString", "");
   }
 

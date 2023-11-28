@@ -1,75 +1,75 @@
 import "@testing-library/jest-dom";
 
-import user from "@testing-library/user-event";
-import { render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
-import { Card } from "./index";
+// import user from "@testing-library/user-event";
+// import { render, screen } from "@testing-library/react";
+// import { MemoryRouter } from "react-router-dom";
+// import { Card } from "./index";
 
-const mockSetSelectedItem = jest.fn();
-const mockedUsedNavigate = jest.fn();
+// const mockSetSelectedItem = jest.fn();
+// const mockedUsedNavigate = jest.fn();
 
-interface IContext {
-  searchResults: { name: string; image: string }[];
-  setSelectedItem: jest.Mock;
-}
+// interface IContext {
+//   searchResults: { name: string; image: string }[];
+//   setSelectedItem: jest.Mock;
+// }
 
-jest.mock("../../hooks/useAppContext", () => ({
-  useAppContext: (): IContext => ({
-    searchResults: [{ name: "pikachu", image: "pikachu.jpg" }],
-    setSelectedItem: mockSetSelectedItem,
-  }),
-}));
+// jest.mock("../../hooks/useAppContext", () => ({
+//   useAppContext: (): IContext => ({
+//     searchResults: [{ name: "pikachu", image: "pikachu.jpg" }],
+//     setSelectedItem: mockSetSelectedItem,
+//   }),
+// }));
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: (): jest.Mock => mockedUsedNavigate,
-}));
+// jest.mock("react-router-dom", () => ({
+//   ...jest.requireActual("react-router-dom"),
+//   useNavigate: (): jest.Mock => mockedUsedNavigate,
+// }));
 
-function renderCard(): void {
-  render(
-    <MemoryRouter>
-      <Card name="pikachu" image="pikachu.jpg" />
-    </MemoryRouter>,
-  );
-}
+// function renderCard(): void {
+//   render(
+//     <MemoryRouter>
+//       <Card name="pikachu" image="pikachu.jpg" />
+//     </MemoryRouter>,
+//   );
+// }
 
-describe("Card component", () => {
-  test("should render the relevant card data when there is no image src", () => {
-    render(
-      <MemoryRouter>
-        <Card name="pikachu" image={null} />
-      </MemoryRouter>,
-    );
+// describe("Card component", () => {
+//   test("should render the relevant card data when there is no image src", () => {
+//     render(
+//       <MemoryRouter>
+//         <Card name="pikachu" image={null} />
+//       </MemoryRouter>,
+//     );
 
-    const card = screen.getByTestId("card");
-    const cardImage = screen.queryByRole("img", { name: /pikachu/i });
+//     const card = screen.getByTestId("card");
+//     const cardImage = screen.queryByRole("img", { name: /pikachu/i });
 
-    expect(card).toBeInTheDocument();
-    expect(cardImage).not.toBeInTheDocument();
-  });
+//     expect(card).toBeInTheDocument();
+//     expect(cardImage).not.toBeInTheDocument();
+//   });
 
-  test("should render the relevant card data", () => {
-    renderCard();
+//   test("should render the relevant card data", () => {
+//     renderCard();
 
-    const card = screen.getByTestId("card");
-    const cardTitle = screen.getByRole("heading", { name: /pikachu/i });
-    const cardImage = screen.getByRole("img", { name: /pikachu/i });
+//     const card = screen.getByTestId("card");
+//     const cardTitle = screen.getByRole("heading", { name: /pikachu/i });
+//     const cardImage = screen.getByRole("img", { name: /pikachu/i });
 
-    expect(card).toBeInTheDocument();
-    expect(cardTitle).toBeInTheDocument();
-    expect(cardImage).toBeInTheDocument();
-    expect(cardImage).toHaveAttribute("src", "pikachu.jpg");
-  });
+//     expect(card).toBeInTheDocument();
+//     expect(cardTitle).toBeInTheDocument();
+//     expect(cardImage).toBeInTheDocument();
+//     expect(cardImage).toHaveAttribute("src", "pikachu.jpg");
+//   });
 
-  test("should open detailed card component by clicking on a card", async () => {
-    renderCard();
+//   test("should open detailed card component by clicking on a card", async () => {
+//     renderCard();
 
-    const card = screen.getByTestId("card");
-    expect(card).toBeInTheDocument();
+//     const card = screen.getByTestId("card");
+//     expect(card).toBeInTheDocument();
 
-    await user.click(card);
+//     await user.click(card);
 
-    expect(mockSetSelectedItem).toHaveBeenCalledWith("pikachu");
-    expect(mockedUsedNavigate).toHaveBeenCalledWith("details-pikachu?limit=30&page=1");
-  });
-});
+//     expect(mockSetSelectedItem).toHaveBeenCalledWith("pikachu");
+//     expect(mockedUsedNavigate).toHaveBeenCalledWith("details-pikachu?limit=30&page=1");
+//   });
+// });

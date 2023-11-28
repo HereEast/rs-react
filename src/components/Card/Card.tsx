@@ -1,7 +1,6 @@
 import { ReactElement } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRouter } from "next/router";
 import { useAppContext } from "../../hooks";
-import { getSearchParam } from "../../utils";
 
 import classnames from "classnames";
 import styles from "./card.module.scss";
@@ -13,17 +12,23 @@ interface CardProps {
 }
 
 function Card({ name, image }: CardProps): ReactElement {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const { setSelectedItem } = useAppContext();
-  const [searchParams] = useSearchParams();
 
-  const page = getSearchParam(searchParams, "page");
-  const limit = getSearchParam(searchParams, "limit");
+  const page = router.query.page as string;
+  const limit = router.query.limit as string;
 
   function handleCardClick(): void {
     setSelectedItem(name);
-    navigate(`details-${name}?limit=${limit}&page=${page}`);
+    router.push({
+      pathname: "/",
+      query: {
+        details: name,
+        limit: limit,
+        page: page,
+      },
+    });
   }
 
   return (

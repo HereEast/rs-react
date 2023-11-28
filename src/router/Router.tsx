@@ -1,8 +1,8 @@
 import { ReactElement } from "react";
 import { Route, Routes } from "react-router-dom";
-import { Home } from "../pages/Home";
+import { Home } from "../components/pages/Home";
 import { Details } from "../components/Details";
-import { NotFound } from "../pages/NotFound";
+import { NotFound } from "../components/pages/NotFound";
 
 function Router(): ReactElement {
   return (

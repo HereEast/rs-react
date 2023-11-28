@@ -1,29 +1,29 @@
 import { ReactElement } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRouter } from "next/router";
 import { Button } from "../Button";
 import { Message } from "../Message";
 import { useAppContext } from "../../hooks";
-import { getSearchParam } from "../../utils";
-import { ERROR__DETAILS, LOADER__MESSAGE } from "../../constants";
-
 import { useAppSelector } from "../../store/store";
+import { ERROR__DETAILS, LOADER__MESSAGE } from "../../constants";
 
 import styles from "./details.module.scss";
 
 function Details(): ReactElement {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const { pokemonDetails, isLoading, error } = useAppSelector((state) => state.pokemonDetails);
   const { setSelectedItem } = useAppContext();
 
-  const [searchParams] = useSearchParams();
-
-  const page = getSearchParam(searchParams, "page");
-  const limit = getSearchParam(searchParams, "limit");
+  const limit = router.query.limit as string;
+  const page = router.query.page as string;
 
   function handleClose(): void {
     setSelectedItem("");
-    navigate(`/?limit=${limit}&page=${page}`);
+
+    router.push({
+      pathname: "/",
+      query: { limit, page },
+    });
   }
 
   return (

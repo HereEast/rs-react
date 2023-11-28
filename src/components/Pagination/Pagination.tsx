@@ -1,21 +1,25 @@
 import { MouseEvent, ReactElement, useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 import { Button } from "../Button";
 import { LimitSelect } from "../LimitSelect";
-import { getSearchParam, getMaxPage, setLocalStorage } from "../../utils";
+import { getMaxPage, setLocalStorage } from "../../utils";
 import { useAppSelector } from "../../store/store";
-import { MIN_PAGE, INIT_PARAMS } from "../../constants";
+import { MIN_PAGE } from "../../constants";
+
+import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 
 import styles from "./pagination.module.scss";
 
 function Pagination(): ReactElement {
   const { isLoading } = useAppSelector((state) => state.pokemon);
 
-  const [searchParams, setSearchParams] = useSearchParams(INIT_PARAMS);
-  const [maxPage, setMaxPage] = useState<string>("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const page = getSearchParam(searchParams, "page");
-  const limit = getSearchParam(searchParams, "limit");
+  const limit = router.query.limit as string;
+  const page = router.query.page as string;
+
+  const [maxPage, setMaxPage] = useState<string>("");
 
   useEffect(() => {
     async function handleMaxPage(): Promise<void> {
@@ -33,10 +37,16 @@ function Pagination(): ReactElement {
 
       if (isPrevButton) {
         const newPage = Number(page) - 1;
-        setSearchParams({ limit: limit, page: String(newPage) });
+        router.push({
+          pathname: "/",
+          query: { limit, page: newPage },
+        });
       } else {
         const newPage = Number(page) + 1;
-        setSearchParams({ limit: limit, page: String(newPage) });
+        router.push({
+          pathname: "/",
+          query: { limit, page: newPage },
+        });
       }
     }
 
