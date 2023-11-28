@@ -6,8 +6,8 @@
   height: 3rem;
   padding: 0 1rem;
   padding-bottom: 2px;
-  background-color: #e3e3e3;
-  border: 1px solid #5b5b5b;
+  background-color: $button-back;
+  border: 1px solid $button-border;
   border-radius: 2px;
   font-size: $text-size;
   text-transform: uppercase;
@@ -16,7 +16,7 @@
   transition: all 0.2s ease-in;
 
   &:hover {
-    background-color: #d0d0d0;
+    background-color: $button-back-hover;
   }
 
   &:disabled {

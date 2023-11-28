@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "format:fix": "prettier --write .",
+    "prepare": "husky install",
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
