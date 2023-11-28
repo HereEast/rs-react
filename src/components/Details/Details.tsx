@@ -1,30 +1,22 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "../Button";
 import { Message } from "../Message";
 import { useAppContext } from "../../hooks";
-import { useGetPokemonQuery } from "../../store/query";
-import { getSearchParam, parseData } from "../../utils";
-import { IPokemonData } from "../../types/types";
+import { getSearchParam } from "../../utils";
 import { ERROR__DETAILS, LOADER__MESSAGE } from "../../constants";
+
+import { useAppSelector } from "../../store/store";
 
 import styles from "./details.module.scss";
 
 function Details(): ReactElement {
   const navigate = useNavigate();
 
-  const { selectedItem, setSelectedItem } = useAppContext();
-  const { data, isLoading, isSuccess, isError } = useGetPokemonQuery(selectedItem);
+  const { pokemonDetails, isLoading, error } = useAppSelector((state) => state.pokemonDetails);
+  const { setSelectedItem } = useAppContext();
 
-  const [pokemon, setPokemon] = useState<IPokemonData | undefined>(undefined);
   const [searchParams] = useSearchParams();
-
-  useEffect(() => {
-    if (isSuccess) {
-      const result = parseData(data);
-      setPokemon(result);
-    }
-  }, [isSuccess, data]);
 
   const page = getSearchParam(searchParams, "page");
   const limit = getSearchParam(searchParams, "limit");
@@ -37,19 +29,19 @@ function Details(): ReactElement {
   return (
     <div className={styles.details__container} data-testid="details">
       {isLoading && <Message message={LOADER__MESSAGE} />}
-      {isError && <Message message={ERROR__DETAILS} />}
+      {error && <Message message={ERROR__DETAILS} />}
 
-      {!isLoading && !isError && (
+      {!isLoading && !error && (
         <>
           <div className={styles.details}>
             <div className={styles.details__image}>
-              <img src={pokemon?.image || ""} alt={`Image of ${pokemon?.name.toUpperCase()}`} />
+              <img src={pokemonDetails?.image || ""} alt={`Image of ${pokemonDetails?.name.toUpperCase()}`} />
             </div>
             <div className={styles.details__info}>
-              <h2>{pokemon?.name.toUpperCase()}</h2>
+              <h2>{pokemonDetails?.name.toUpperCase()}</h2>
               <div className={styles.details__characteristics}>
-                <span>Weight: {pokemon?.weight}</span>
-                <span>Height: {pokemon?.height}</span>
+                <span>Weight: {pokemonDetails?.weight}</span>
+                <span>Height: {pokemonDetails?.height}</span>
               </div>
             </div>
           </div>

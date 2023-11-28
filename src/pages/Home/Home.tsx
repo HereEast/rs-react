@@ -7,6 +7,7 @@ import { NotFound } from "../NotFound";
 import { useAppContext } from "../../hooks";
 import { useAppDispatch } from "../../store/store";
 import { pokemonThunk, allPokemonThunk } from "../../store/pokemon/thunk";
+import { pokemonDetailsThunk } from "../../store/pokemonDetails/thunk";
 import { getLocalStorage, getSearchParam } from "../../utils";
 import { INIT_PARAMS } from "../../constants";
 
@@ -32,6 +33,7 @@ function Home(): ReactElement {
     }
 
     if (details && details.split("-")[0] === "details") {
+      dispatch(pokemonDetailsThunk(details.split("details-")[1]));
       setSelectedItem(details.split("details-")[1]);
       setCorrectPath(true);
     }
