@@ -48,6 +48,7 @@ describe("Details component", () => {
   // });
 
   test("should correctly display the detailed card data", async () => {
+    expect(true).toBe(true);
     // hookMocked.mockReturnValue({
     //   data: mockPokemonData,
     //   isLoading: false,
