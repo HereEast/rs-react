@@ -1,11 +1,10 @@
 import { ChangeEvent, ReactElement, useLayoutEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { Button } from "../Button";
 import { getLocalStorage, setLocalStorage } from "../../utils";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { saveSearchString } from "../../store/search/slice";
 import { pokemonThunk, allPokemonThunk } from "../../store/pokemon/thunk";
-
-import { useRouter } from "next/router";
 
 import styles from "./searchInput.module.scss";
 
