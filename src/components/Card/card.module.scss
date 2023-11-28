@@ -1,12 +1,12 @@
-@import "../../styles/index.scss";
+@import "../../styles/variables.scss";
 
 .card {
   max-width: 40rem;
   width: 100%;
   height: 100%;
   padding: 2rem;
-  background-color: var(--white);
-  border: 1px solid var(--card-border);
+  background-color: $white;
+  border: 1px solid $card-border;
   border-radius: 1rem;
   font-size: 2rem;
 

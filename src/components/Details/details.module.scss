@@ -1,4 +1,4 @@
-@import "../../styles/index.scss";
+@import "../../styles/variables.scss";
 
 .details__container {
   display: flex;
@@ -13,7 +13,7 @@
   width: 50%;
 
   padding: 9rem 3rem;
-  background-color: var(--white);
+  background-color: $white;
 }
 
 .details {

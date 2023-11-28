@@ -1,4 +1,4 @@
-@import "../../styles/index.scss";
+@import "../../styles/variables.scss";
 
 .pagination {
   display: flex;
@@ -9,15 +9,6 @@
     display: flex;
     gap: 1rem;
   }
-
-  &__button {
-    padding: 0;
-    width: 3rem;
-
-    &_active {
-      background-color: #b5b5b5;
-    }
-  }
 }
 
 .pagination__buttons {
@@ -27,8 +18,8 @@
   gap: 1rem;
 
   .label {
-    color: var(--black);
-    font-size: var(--text-size);
+    color: $black;
+    font-size: $text-size;
     text-transform: uppercase;
 
     span {
@@ -36,49 +27,3 @@
     }
   }
 }
-
-// .pagination__select,
-// .pagination__buttons {
-//   height: 100%;
-//   display: flex;
-//   align-items: center;
-//   gap: 1rem;
-
-//   .label {
-//     color: var(--black);
-//     font-size: var(--text-size);
-//     text-transform: uppercase;
-
-//     span {
-//       margin-left: 0.5rem;
-//     }
-//   }
-// }
-
-// .pagination__select {
-//   position: relative;
-
-//   .select {
-//     appearance: none;
-//     display: inline-block;
-//     padding: 0 2.2rem 0 0.8rem;
-//     height: 3rem;
-//     background-color: var(--white);
-//     border: 1px solid #5b5b5b;
-//     border-radius: 2px;
-//     cursor: pointer;
-//   }
-
-//   &::after {
-//     content: "";
-//     position: absolute;
-//     bottom: 11px;
-//     right: 8px;
-//     width: 0.8rem;
-//     height: 0.5rem;
-//     background-color: var(--black);
-//     clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-//     pointer-events: none;
-//     transition: all 0.2s ease-in;
-//   }
-// }

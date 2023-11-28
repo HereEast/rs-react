@@ -1,4 +1,4 @@
-@import "../../styles/index.scss";
+@import "../../styles/variables.scss";
 
 .header {
   position: relative;
@@ -26,8 +26,8 @@
     font-size: 1.3rem;
     text-align: center;
     line-height: 1;
-    background-color: var(--black);
+    background-color: $black;
     border-radius: 0 0 5px 5px;
-    color: var(--white);
+    color: $white;
   }
 }
