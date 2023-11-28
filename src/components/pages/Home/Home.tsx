@@ -1,4 +1,5 @@
-import { ReactElement, useEffect, useLayoutEffect, MouseEvent } from "react";
+import { ReactElement, useEffect, MouseEvent } from "react";
+import { useRouter } from "next/router";
 import { Header } from "../../Header";
 import { SearchResults } from "../../SearchResults";
 import { Pagination } from "../../Pagination";
@@ -9,21 +10,19 @@ import { pokemonThunk, allPokemonThunk } from "../../../store/pokemon/thunk";
 import { pokemonDetailsThunk } from "../../../store/pokemonDetails/thunk";
 import { getLocalStorage } from "../../../utils";
 
-import { useRouter } from "next/router";
-
 import classnames from "classnames";
 import styles from "./home.module.scss";
 
 function Home(): ReactElement {
+  const { selectedItem, setSelectedItem } = useAppContext();
+
   const dispatch = useAppDispatch();
   const router = useRouter();
-
-  const { selectedItem, setSelectedItem } = useAppContext();
 
   const limit = router.query.limit as string;
   const page = router.query.page as string;
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (router.query.details && typeof router.query.details === "string") {
       dispatch(pokemonDetailsThunk(router.query.details));
       setSelectedItem(router.query.details);
@@ -38,7 +37,7 @@ function Home(): ReactElement {
     } else {
       dispatch(allPokemonThunk({ limit: limit, page: page }));
     }
-  }, [limit, page]);
+  }, [limit, page, dispatch]);
   //
 
   function handleClose(e: MouseEvent): void {
