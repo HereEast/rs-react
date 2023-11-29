@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { Pagination } from "./index";
 
 jest.mock("react-redux");
+jest.mock("next/navigation");
 
 jest.spyOn(reduxHooks, "useDispatch").mockReturnValue(jest.fn());
 jest.spyOn(reduxHooks, "useSelector").mockReturnValue({ isLoading: false });
