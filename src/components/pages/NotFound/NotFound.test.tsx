@@ -3,9 +3,9 @@ import "@testing-library/jest-dom";
 import user from "@testing-library/user-event";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { useRouter } from "next/router";
 import { ReactElement } from "react";
 import { NotFound } from "./index";
-import { useRouter } from "next/router";
 
 jest.mock("next/router", () => {
   const router = {

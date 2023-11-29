@@ -1,74 +1,63 @@
 import "@testing-library/jest-dom";
 
-// import user from "@testing-library/user-event";
-// import { render, screen } from "@testing-library/react";
-// import { MemoryRouter } from "react-router-dom";
-// import { Card } from "./index";
+import user from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
+import { useRouter } from "next/router";
+import { Card } from "./index";
 
-// const mockSetSelectedItem = jest.fn();
-// const mockedUsedNavigate = jest.fn();
+const mockUseDispatch = jest.fn();
 
-// interface IContext {
-//   searchResults: { name: string; image: string }[];
-//   setSelectedItem: jest.Mock;
-// }
+jest.mock("react-redux", () => ({
+  ...jest.requireActual("react-redux"),
+  useDispatch: (): jest.Mock => mockUseDispatch,
+}));
 
-// jest.mock("../../hooks/useAppContext", () => ({
-//   useAppContext: (): IContext => ({
-//     searchResults: [{ name: "pikachu", image: "pikachu.jpg" }],
-//     setSelectedItem: mockSetSelectedItem,
-//   }),
-// }));
-
-// jest.mock("react-router-dom", () => ({
-//   ...jest.requireActual("react-router-dom"),
-//   useNavigate: (): jest.Mock => mockedUsedNavigate,
-// }));
-
-// function renderCard(): void {
-//   render(
-//     <MemoryRouter>
-//       <Card name="pikachu" image="pikachu.jpg" />
-//     </MemoryRouter>,
-//   );
-// }
+jest.mock("next/router", () => {
+  const router = {
+    push: jest.fn(),
+    query: { limit: "30", page: "1" },
+  };
+  return {
+    useRouter: jest.fn().mockReturnValue(router),
+  };
+});
 
 describe("Card component", () => {
   test("should render the relevant card data when there is no image src", () => {
-    expect(true).toBe(true);
-    //     render(
-    //       <MemoryRouter>
-    //         <Card name="pikachu" image={null} />
-    //       </MemoryRouter>,
-    //     );
-    //     const card = screen.getByTestId("card");
-    //     const cardImage = screen.queryByRole("img", { name: /pikachu/i });
-    //     expect(card).toBeInTheDocument();
-    //     expect(cardImage).not.toBeInTheDocument();
+    render(<Card name="pikachu" image={null} />);
+
+    const card = screen.getByTestId("card");
+    const cardImage = screen.queryByRole("img", { name: /pikachu/i });
+
+    expect(card).toBeInTheDocument();
+    expect(cardImage).not.toBeInTheDocument();
   });
 
-  //   test("should render the relevant card data", () => {
-  //     renderCard();
+  test("should render the relevant card data", () => {
+    render(<Card name="pikachu" image="pikachu.png" />);
 
-  //     const card = screen.getByTestId("card");
-  //     const cardTitle = screen.getByRole("heading", { name: /pikachu/i });
-  //     const cardImage = screen.getByRole("img", { name: /pikachu/i });
+    const card = screen.getByTestId("card");
+    const cardTitle = screen.getByRole("heading", { name: /pikachu/i });
+    const cardImage = screen.getByRole("img", { name: /pikachu/i });
 
-  //     expect(card).toBeInTheDocument();
-  //     expect(cardTitle).toBeInTheDocument();
-  //     expect(cardImage).toBeInTheDocument();
-  //     expect(cardImage).toHaveAttribute("src", "pikachu.jpg");
-  //   });
+    expect(card).toBeInTheDocument();
+    expect(cardTitle).toBeInTheDocument();
+    expect(cardImage).toBeInTheDocument();
+    expect(cardImage).toHaveAttribute("src", "pikachu.png");
+  });
 
-  //   test("should open detailed card component by clicking on a card", async () => {
-  //     renderCard();
+  test("should open detailed card component by clicking on a card", async () => {
+    render(<Card name="pikachu" image="pikachu.png" />);
 
-  //     const card = screen.getByTestId("card");
-  //     expect(card).toBeInTheDocument();
+    const card = screen.getByTestId("card");
+    expect(card).toBeInTheDocument();
 
-  //     await user.click(card);
+    await user.click(card);
 
-  //     expect(mockSetSelectedItem).toHaveBeenCalledWith("pikachu");
-  //     expect(mockedUsedNavigate).toHaveBeenCalledWith("details-pikachu?limit=30&page=1");
-  //   });
+    expect(useRouter().push).toHaveBeenCalledTimes(1);
+    expect(useRouter().push).toHaveBeenCalledWith({
+      pathname: "/",
+      query: { details: "pikachu", limit: "30", page: "1" },
+    });
+  });
 });
