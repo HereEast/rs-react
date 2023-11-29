@@ -5,6 +5,7 @@ import { pokemonDetailsReducer } from "./pokemonDetails/slice";
 
 import searchStringReducer from "./search/slice";
 import limitReducer from "./limit/slice";
+import selectedItemReducer from "./selectedItem/slice";
 
 // import { Store, ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
 // import { createWrapper, HYDRATE } from "next-redux-wrapper";
@@ -51,6 +52,7 @@ export const store = configureStore({
   reducer: {
     searchString: searchStringReducer,
     limit: limitReducer,
+    selectedItem: selectedItemReducer,
     pokemon: pokemonReducer,
     pokemonDetails: pokemonDetailsReducer,
   },

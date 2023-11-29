@@ -1,6 +1,5 @@
 import type { AppProps } from "next/app";
 import { ReactElement } from "react";
-import { AppContextProvider } from "../src/context";
 import { Provider } from "react-redux";
 import { store } from "../src/store/store";
 
@@ -13,11 +12,9 @@ function App({ Component, pageProps }: AppProps): ReactElement {
   // const { pageProps } = props;
 
   return (
-    <AppContextProvider>
-      <Provider store={store}>
-        <Component {...pageProps} />
-      </Provider>
-    </AppContextProvider>
+    <Provider store={store}>
+      <Component {...pageProps} />
+    </Provider>
   );
 }
 

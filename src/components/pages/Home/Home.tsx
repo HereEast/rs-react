@@ -4,17 +4,18 @@ import { Header } from "../../Header";
 import { SearchResults } from "../../SearchResults";
 import { Pagination } from "../../Pagination";
 import { Details } from "../../Details";
-import { useAppContext } from "../../../hooks";
 import { useAppDispatch } from "../../../store/store";
 import { pokemonThunk, allPokemonThunk } from "../../../store/pokemon/thunk";
 import { pokemonDetailsThunk } from "../../../store/pokemonDetails/thunk";
+import { setSelectedItem } from "../../../store/selectedItem/slice";
 import { getLocalStorage } from "../../../utils";
+import { useAppSelector } from "../../../store/store";
 
 import classnames from "classnames";
 import styles from "./home.module.scss";
 
 function Home(): ReactElement {
-  const { selectedItem, setSelectedItem } = useAppContext();
+  const { selectedItem } = useAppSelector((state) => state.selectedItem);
 
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -25,9 +26,9 @@ function Home(): ReactElement {
   useEffect(() => {
     if (router.query.details && typeof router.query.details === "string") {
       dispatch(pokemonDetailsThunk(router.query.details));
-      setSelectedItem(router.query.details);
+      dispatch(setSelectedItem(router.query.details));
     }
-  }, [router, setSelectedItem, dispatch]);
+  }, [router, dispatch]);
 
   useEffect(() => {
     const savedSearchString = getLocalStorage("searchString");
@@ -46,7 +47,7 @@ function Home(): ReactElement {
     }
 
     if (e.target.closest(".page__results") && !e.target.closest(".card")) {
-      setSelectedItem("");
+      dispatch(setSelectedItem(""));
 
       router.push({
         pathname: "/",

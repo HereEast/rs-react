@@ -2,23 +2,24 @@ import { ReactElement } from "react";
 import { useRouter } from "next/router";
 import { Button } from "../Button";
 import { Message } from "../Message";
-import { useAppContext } from "../../hooks";
 import { useAppSelector } from "../../store/store";
+import { useAppDispatch } from "../../store/store";
+import { setSelectedItem } from "../../store/selectedItem/slice";
 import { ERROR__DETAILS, LOADER__MESSAGE } from "../../constants";
 
 import styles from "./details.module.scss";
 
 function Details(): ReactElement {
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const { pokemonDetails, isLoading, error } = useAppSelector((state) => state.pokemonDetails);
-  const { setSelectedItem } = useAppContext();
 
   const limit = router.query.limit as string;
   const page = router.query.page as string;
 
   function handleClose(): void {
-    setSelectedItem("");
+    dispatch(setSelectedItem(""));
 
     router.push({
       pathname: "/",
