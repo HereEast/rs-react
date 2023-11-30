@@ -14,15 +14,12 @@ module.exports = {
   },
   plugins: ["react-refresh", "prettier"],
   rules: {
-    "react-refresh/only-export-components": [
-      "warn",
-      { allowConstantExport: true },
-    ],
+    "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     semi: ["error", "always"],
     quotes: ["error", "double"],
     indent: ["error", 2, { SwitchCase: 1 }],
     "comma-dangle": ["error", "always-multiline"],
-    "no-console": "warn",
+    "no-console": 0,
     "prefer-const": "error",
     "no-var": "error",
     "no-unused-vars": "off",
