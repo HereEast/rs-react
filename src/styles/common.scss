@@ -16,6 +16,15 @@ body {
   padding: 2rem;
 }
 
+a {
+  font-size: $text-size;
+  color: $link-color;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
 .link_button {
   height: 3rem;
   padding: 0 1rem;

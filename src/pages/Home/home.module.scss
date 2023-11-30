@@ -7,14 +7,6 @@
   align-items: center;
   margin: 0 auto;
 
-  &__link {
-    font-size: $text-size;
-
-    &:hover {
-      text-decoration: none;
-    }
-  }
-
   span {
     padding-top: 2px;
     display: flex;
