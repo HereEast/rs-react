@@ -1,0 +1,40 @@
+@import "./variables.scss";
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Roboto Mono", monospace;
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  background-color: $page-back;
+}
+
+.link_button {
+  height: 3rem;
+  padding: 0 1rem;
+  padding-bottom: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $button-back;
+  border: 1px solid $button-border;
+  border-radius: 2px;
+
+  color: $black;
+  font-size: $text-size;
+  text-transform: uppercase;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+
+  &:hover {
+    background-color: $button-back-hover;
+  }
+}
