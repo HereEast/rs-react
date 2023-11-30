@@ -8,7 +8,6 @@ function NotFound(): ReactElement {
 
   function navigateBack(): void {
     navigate("/");
-    // location.reload();
   }
 
   return (
