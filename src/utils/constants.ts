@@ -1,3 +1,14 @@
+export const initErrors = {
+  name: [],
+  age: [],
+  country: [],
+  email: [],
+  checkbox: [],
+  password: [],
+  passwordRepeat: [],
+  file: [],
+};
+
 export const COUNTRIES = [
   "Afghanistan",
   "Albania",
