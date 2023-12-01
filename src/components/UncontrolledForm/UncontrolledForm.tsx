@@ -20,6 +20,8 @@ function UncontrolledForm(): ReactElement {
     password: useRef<HTMLInputElement>(null),
     passwordRepeat: useRef<HTMLInputElement>(null),
     file: useRef<HTMLInputElement>(null),
+    genderMale: useRef<HTMLInputElement>(null),
+    genderFemale: useRef<HTMLInputElement>(null),
   };
 
   const [errors, setErrors] = useState(initErrors);
@@ -36,7 +38,12 @@ function UncontrolledForm(): ReactElement {
       password: inputRef.password.current?.value.trim(),
       passwordRepeat: inputRef.passwordRepeat.current?.value.trim(),
       file: inputRef.file.current?.files?.[0],
+      gender: inputRef.genderFemale.current?.checked
+        ? inputRef.genderFemale.current?.value
+        : inputRef.genderMale.current?.value,
     };
+
+    console.log(formData);
 
     try {
       await validationSchema.validate(formData, { abortEarly: false });
@@ -175,6 +182,7 @@ function UncontrolledForm(): ReactElement {
               name="gender"
               value="male"
               className={styles.input}
+              ref={inputRef.genderMale}
             />
           </label>
 
@@ -186,6 +194,7 @@ function UncontrolledForm(): ReactElement {
               value="female"
               defaultChecked
               className={styles.input}
+              ref={inputRef.genderFemale}
             />
           </label>
         </div>
