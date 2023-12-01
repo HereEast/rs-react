@@ -1,4 +1,4 @@
-import { ReactElement, RefObject } from "react";
+import { ReactElement, RefObject, forwardRef } from "react";
 
 import styles from "./input.module.scss";
 
@@ -10,7 +10,13 @@ interface InputProps {
   ref?: RefObject<HTMLInputElement>;
 }
 
-function Input({ type, label, name, id, ref }: InputProps): ReactElement {
+const Input = forwardRef(function ({
+  type,
+  label,
+  name,
+  id,
+  ref,
+}: InputProps): ReactElement {
   return (
     <label htmlFor={name} className={styles.label}>
       {label}
@@ -23,6 +29,6 @@ function Input({ type, label, name, id, ref }: InputProps): ReactElement {
       />
     </label>
   );
-}
+});
 
 export default Input;
