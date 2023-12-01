@@ -1,7 +1,8 @@
 import { FormEvent, ReactElement, useRef, useState } from "react";
 import { Button } from "../Button";
 import { ErrorMessage } from "../ErrorMessage";
-import { validationSchema, initErrors, COUNTRIES } from "../../utils";
+import { validationSchema, initErrors } from "../../utils";
+import { useAppSelector } from "../../store/store";
 
 import * as Yup from "yup";
 
@@ -11,6 +12,9 @@ import styles from "./uncontrolledForm.module.scss";
 // store data in redux store >>> show on Home after successful submit
 
 function UncontrolledForm(): ReactElement {
+  const countriesList = useAppSelector((state) => state.countries);
+  const [errors, setErrors] = useState(initErrors);
+
   const inputRef = {
     name: useRef<HTMLInputElement>(null),
     age: useRef<HTMLInputElement>(null),
@@ -23,8 +27,6 @@ function UncontrolledForm(): ReactElement {
     genderMale: useRef<HTMLInputElement>(null),
     genderFemale: useRef<HTMLInputElement>(null),
   };
-
-  const [errors, setErrors] = useState(initErrors);
 
   async function handleSubmit(e: FormEvent): Promise<void> {
     e.preventDefault();
@@ -111,7 +113,7 @@ function UncontrolledForm(): ReactElement {
           </label>
 
           <datalist id="countries">
-            {COUNTRIES.map((option, idx) => (
+            {countriesList.map((option, idx) => (
               <option key={idx} value={option}>
                 {option}
               </option>
