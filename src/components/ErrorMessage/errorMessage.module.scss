@@ -1,0 +1,7 @@
+@import "../../styles/index.scss";
+
+.message__error {
+  font-size: $text-size;
+  color: $error-color;
+  margin-top: 3px;
+}
