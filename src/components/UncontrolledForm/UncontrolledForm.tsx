@@ -1,7 +1,6 @@
 import { FormEvent, ReactElement, useRef, useState } from "react";
 import { Button } from "../Button";
 import { ErrorMessage } from "../ErrorMessage";
-import { Input } from "../Input";
 import { validationSchema, initErrors, COUNTRIES } from "../../utils";
 
 import * as Yup from "yup";
@@ -10,7 +9,6 @@ import classnames from "classnames";
 import styles from "./uncontrolledForm.module.scss";
 
 // store data in redux store >>> show on Home after successful submit
-// autocomplete control to select country (all countries should be stored in the Redux store)
 
 function UncontrolledForm(): ReactElement {
   const inputRef = {
@@ -64,17 +62,15 @@ function UncontrolledForm(): ReactElement {
       <form className={styles.form} noValidate>
         {/* Name */}
         <div className={styles.container__name}>
-          <Input type="text" name="name" label="Name" ref={inputRef.name} />
-          {/* <label htmlFor="name" className={styles.label}>
+          <label htmlFor="name" className={styles.label}>
             Name
             <input
               type="text"
               name="name"
-              id="name"
               className={styles.input}
               ref={inputRef.name}
             />
-          </label> */}
+          </label>
 
           {errors.name.length > 0 && <ErrorMessage message={errors.name[0]} />}
         </div>
@@ -86,7 +82,6 @@ function UncontrolledForm(): ReactElement {
             <input
               type="text"
               name="age"
-              id="age"
               className={styles.input}
               ref={inputRef.age}
             />
@@ -102,7 +97,6 @@ function UncontrolledForm(): ReactElement {
             <input
               type="text"
               name="country"
-              id="country"
               list="countries"
               className={styles.input}
               ref={inputRef.country}
@@ -129,7 +123,6 @@ function UncontrolledForm(): ReactElement {
             <input
               type="email"
               name="email"
-              id="email"
               className={styles.input}
               ref={inputRef.email}
             />
@@ -148,7 +141,6 @@ function UncontrolledForm(): ReactElement {
               <input
                 type="text"
                 name="password"
-                id="password"
                 className={styles.input}
                 ref={inputRef.password}
               />
@@ -159,7 +151,6 @@ function UncontrolledForm(): ReactElement {
               <input
                 type="text"
                 name="passwordRepeat"
-                id="passwordRepeat"
                 className={styles.input}
                 ref={inputRef.passwordRepeat}
               />
@@ -182,7 +173,7 @@ function UncontrolledForm(): ReactElement {
             <input
               type="radio"
               name="gender"
-              id="gender-male"
+              value="male"
               className={styles.input}
             />
           </label>
@@ -192,7 +183,7 @@ function UncontrolledForm(): ReactElement {
             <input
               type="radio"
               name="gender"
-              id="gender-female"
+              value="female"
               defaultChecked
               className={styles.input}
             />
@@ -206,7 +197,6 @@ function UncontrolledForm(): ReactElement {
               <input
                 type="file"
                 name="file"
-                id="file"
                 className={classnames(styles.input, styles.input__file)}
                 accept="image/png, image/jpeg"
                 ref={inputRef.file}
@@ -224,7 +214,6 @@ function UncontrolledForm(): ReactElement {
             <input
               type="checkbox"
               name="checkbox"
-              id="checkbox"
               className={classnames(styles.input, styles.input__checkbox)}
               ref={inputRef.checkbox}
             />
