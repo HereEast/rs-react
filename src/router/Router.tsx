@@ -1,8 +1,8 @@
 import { ReactElement } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Home } from "../pages/Home";
-import { UncontrolledForm } from "../pages/UncontrolledForm";
-import { ReactHookForm } from "../pages/ReactHookForm";
+import { UncontrolledForm } from "../components/UncontrolledForm";
+import { ReactHookForm } from "../components/ReactHookForm";
 import { NotFound } from "../pages/NotFound";
 
 function Router(): ReactElement {
