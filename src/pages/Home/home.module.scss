@@ -1,5 +1,13 @@
 @import "../../styles/index.scss";
 
+.container__home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6rem;
+}
+
 .nav {
   width: 100%;
   display: flex;
@@ -15,5 +23,23 @@
     text-align: center;
     letter-spacing: 3px;
     margin: 0 2rem 0 2.2rem;
+  }
+}
+
+.card {
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  background-color: $white;
+  border-radius: 2px;
+  border: 1px solid $button-border;
+  padding: 1.5rem;
+
+  img {
+    margin-bottom: 3rem;
+  }
+
+  span {
+    font-size: $text-size;
   }
 }

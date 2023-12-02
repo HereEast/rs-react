@@ -1,4 +1,5 @@
 import { FormEvent, ReactElement, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
 import { ErrorMessage } from "../ErrorMessage";
 import { validationSchema, initErrors, parseFormData } from "../../utils";
@@ -13,6 +14,8 @@ import styles from "./uncontrolledForm.module.scss";
 
 function UncontrolledForm(): ReactElement {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const countriesList = useAppSelector((state) => state.countries);
 
   const [errors, setErrors] = useState<IErrorsObject>(initErrors);
@@ -49,28 +52,25 @@ function UncontrolledForm(): ReactElement {
         : inputRef.genderMale.current?.value,
     };
 
-    // Image base
-    if (imageFile) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        dispatch(saveFileBase(reader.result));
-      });
-
-      reader.readAsDataURL(imageFile as File);
-    }
-
     try {
       await validationSchema.validate(formData, { abortEarly: false });
 
-      console.log("Valid form");
+      // Image base
+      if (imageFile) {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          dispatch(saveFileBase(reader.result));
+        });
 
-      // Save to store on no errors
+        reader.readAsDataURL(imageFile as File);
+      }
+
       const data = parseFormData(formData);
       dispatch(saveFormData(data));
 
-      // If no errors, navigate to Home + render data
+      navigate("/");
 
-      // Here
+      // Here valid form
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const currentErrors = JSON.parse(JSON.stringify(initErrors));
@@ -88,6 +88,9 @@ function UncontrolledForm(): ReactElement {
 
   return (
     <div className={styles.container}>
+      <Link to="/" className={styles.nav__link}>
+        Home
+      </Link>
       <h1 className={styles.title}>Uncontrolled Form</h1>
 
       <form className={styles.form} noValidate>
