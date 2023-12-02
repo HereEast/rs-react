@@ -30,7 +30,7 @@ export const validationSchema = Yup.object({
       /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*\W).+$/,
       "Password should contain at least 1 number, 1 uppercase letter, 1 lowercase letter, 1 special character",
     ),
-  ["password-repeat"]: Yup.string()
+  passwordRepeat: Yup.string()
     .required("Repeat password is required.")
     .test(
       "password-should-match",

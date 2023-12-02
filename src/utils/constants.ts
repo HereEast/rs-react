@@ -1,4 +1,6 @@
-export const initErrors = {
+import { IErrorsObject } from "../types";
+
+export const initErrors: IErrorsObject = {
   name: [],
   age: [],
   country: [],
@@ -25,7 +27,7 @@ export const COUNTRIES = [
   "Australia",
   "Austria",
   "Azerbaijan",
-  "Bahamas (the)",
+  "Bahamas",
   "Bahrain",
   "Bangladesh",
   "Barbados",
