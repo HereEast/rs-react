@@ -1,19 +1,21 @@
 import { FormEvent, ReactElement, useRef, useState } from "react";
 import { Button } from "../Button";
 import { ErrorMessage } from "../ErrorMessage";
-import { validationSchema, initErrors } from "../../utils";
-import { useAppSelector } from "../../store/store";
+import { validationSchema, initErrors, parseFormData } from "../../utils";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { saveFormData, saveFileBase } from "../../store/form";
+import { IErrorsObject, IFormDataInit } from "../../types";
 
 import * as Yup from "yup";
 
 import classnames from "classnames";
 import styles from "./uncontrolledForm.module.scss";
 
-// store data in redux store >>> show on Home after successful submit
-
 function UncontrolledForm(): ReactElement {
+  const dispatch = useAppDispatch();
   const countriesList = useAppSelector((state) => state.countries);
-  const [errors, setErrors] = useState(initErrors);
+
+  const [errors, setErrors] = useState<IErrorsObject>(initErrors);
 
   const inputRef = {
     name: useRef<HTMLInputElement>(null),
@@ -31,7 +33,9 @@ function UncontrolledForm(): ReactElement {
   async function handleSubmit(e: FormEvent): Promise<void> {
     e.preventDefault();
 
-    const formData = {
+    const imageFile = inputRef.file.current?.files?.[0];
+
+    const formData: IFormDataInit = {
       name: inputRef.name.current?.value.trim(),
       age: inputRef.age.current?.value.trim(),
       email: inputRef.email.current?.value.trim(),
@@ -39,16 +43,34 @@ function UncontrolledForm(): ReactElement {
       checkbox: inputRef.checkbox.current?.checked,
       password: inputRef.password.current?.value.trim(),
       passwordRepeat: inputRef.passwordRepeat.current?.value.trim(),
-      file: inputRef.file.current?.files?.[0],
+      file: imageFile,
       gender: inputRef.genderFemale.current?.checked
         ? inputRef.genderFemale.current?.value
         : inputRef.genderMale.current?.value,
     };
 
-    console.log(formData);
+    // Image base
+    if (imageFile) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        dispatch(saveFileBase(reader.result));
+      });
+
+      reader.readAsDataURL(imageFile as File);
+    }
 
     try {
       await validationSchema.validate(formData, { abortEarly: false });
+
+      console.log("Valid form");
+
+      // Save to store on no errors
+      const data = parseFormData(formData);
+      dispatch(saveFormData(data));
+
+      // If no errors, navigate to Home + render data
+
+      // Here
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const currentErrors = JSON.parse(JSON.stringify(initErrors));
