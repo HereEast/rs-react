@@ -7,8 +7,6 @@ import styles from "./home.module.scss";
 function Home(): ReactElement {
   const { data } = useAppSelector((state) => state.formData);
 
-  console.log(data);
-
   return (
     <div className={styles.container__home}>
       <nav className={styles.nav}>
@@ -23,7 +21,7 @@ function Home(): ReactElement {
 
       {data.name && (
         <div className={styles.card}>
-          <img src={data.file.fileBase} />
+          <img src={data.file} />
           <span>Name: {data.name}</span>
           <span>
             Gender: {data.gender[0].toUpperCase() + data.gender.slice(1)}

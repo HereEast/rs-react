@@ -1,13 +1,13 @@
 export interface IFormDataInit {
-  name: string | undefined;
-  age: string | undefined;
-  email: string | undefined;
-  country: string | undefined;
-  checkbox: boolean | undefined;
-  password: string | undefined;
-  passwordRepeat: string | undefined;
-  file: File | undefined;
-  gender: string | undefined;
+  name?: string | undefined;
+  age?: string | undefined;
+  email?: string | undefined;
+  country?: string | undefined;
+  checkbox?: boolean | undefined;
+  password?: string | undefined;
+  passwordRepeat?: string | undefined;
+  file?: File | FileList | undefined;
+  gender?: string | undefined;
 }
 
 export interface IFormData {
@@ -17,11 +17,7 @@ export interface IFormData {
   password: string;
   country: string;
   gender: string;
-  file: {
-    fileName: string;
-    fileSize: number;
-    fileBase?: string;
-  };
+  file?: string;
 }
 
 export interface IErrorsObject {

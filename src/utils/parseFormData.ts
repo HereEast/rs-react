@@ -8,10 +8,6 @@ export function parseFormData(formData: IFormDataInit): IFormData {
     country: formData.country || "",
     password: formData.password || "",
     gender: formData.gender || "",
-    file: {
-      fileName: formData.file?.name || "",
-      fileSize: formData.file?.size || 0,
-    },
   };
 
   return parsedData;

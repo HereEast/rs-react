@@ -12,11 +12,7 @@ export const initialData: IInitialData = {
     email: "",
     country: "",
     password: "",
-    file: {
-      fileName: "",
-      fileSize: 1234,
-      fileBase: "",
-    },
+    file: "",
     gender: "",
   },
 };
@@ -29,7 +25,7 @@ export const formDataSlice = createSlice({
       state.data = action.payload;
     },
     saveFileBase(state, action) {
-      state.data.file.fileBase = action.payload;
+      state.data.file = action.payload;
     },
   },
 });
