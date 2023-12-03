@@ -24,7 +24,8 @@
     cursor: default;
 
     &:hover {
-      background-color: initial;
+      background-color: $button-back;
+      opacity: 0.5;
     }
   }
 }
