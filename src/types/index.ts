@@ -6,7 +6,7 @@ export interface IFormDataInit {
   checkbox?: boolean | undefined;
   password?: string | undefined;
   passwordRepeat?: string | undefined;
-  file?: File | FileList | undefined;
+  file?: File | undefined;
   gender?: string | undefined;
 }
 

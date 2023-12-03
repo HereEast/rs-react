@@ -28,7 +28,7 @@ function ReactHookForm(): ReactElement {
   });
 
   function onSubmit(data: IFormDataInit): void {
-    if (data.file && Array.isArray(data.file) && data.file[0]) {
+    if (data.file[0]) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
         dispatch(saveFileBase(reader.result));

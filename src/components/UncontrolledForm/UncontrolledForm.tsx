@@ -52,8 +52,6 @@ function UncontrolledForm(): ReactElement {
         : inputRef.genderMale.current?.value,
     };
 
-    console.log(imageFile);
-
     try {
       await validationSchema.validate(formData, { abortEarly: false });
 
