@@ -20,10 +20,6 @@ export const validationSchema = Yup.object({
   email: Yup.string()
     .required("Email is required.")
     .email("Please, enter a valid email."),
-  checkbox: Yup.boolean().oneOf(
-    [true],
-    "You must agree to the Terms & Conditions.",
-  ),
   password: Yup.string()
     .required("Password is required.")
     .matches(
@@ -42,17 +38,30 @@ export const validationSchema = Yup.object({
   file: Yup.mixed()
     .required("Image is required.")
     .test("fileSize", "File too large. Max 2Mb.", (value) => {
+      if (value instanceof FileList) {
+        return value && value[0]?.size <= 1024 * 1024 * 2;
+      }
+
       if (value instanceof File) {
-        return value.size <= 1024 * 1024 * 2;
+        return value && value.size <= 1024 * 1024 * 2;
       }
     })
     .test(
       "fileType",
       "Invalid file format. Please, choose jpg, jpeg or png.",
       (value) => {
+        if (value instanceof FileList) {
+          return ["image/jpeg", "image/png"].includes(value[0]?.type);
+        }
+
         if (value instanceof File) {
           return ["image/jpeg", "image/png"].includes(value.type);
         }
       },
     ),
+  checkbox: Yup.boolean().oneOf(
+    [true],
+    "You must agree to the Terms & Conditions.",
+  ),
+  gender: Yup.string().required("Gender is required."),
 });
