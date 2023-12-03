@@ -52,6 +52,8 @@ function UncontrolledForm(): ReactElement {
         : inputRef.genderMale.current?.value,
     };
 
+    console.log(imageFile);
+
     try {
       await validationSchema.validate(formData, { abortEarly: false });
 
@@ -62,7 +64,7 @@ function UncontrolledForm(): ReactElement {
           dispatch(saveFileBase(reader.result));
         });
 
-        reader.readAsDataURL(imageFile as File);
+        reader.readAsDataURL(imageFile);
       }
 
       const data = parseFormData(formData);
@@ -235,6 +237,7 @@ function UncontrolledForm(): ReactElement {
                 name="file"
                 className={classnames(styles.input, styles.input__file)}
                 accept="image/png, image/jpeg"
+                multiple={false}
                 ref={inputRef.file}
               />
             </label>
