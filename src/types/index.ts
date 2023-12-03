@@ -1,3 +1,5 @@
+import { RefObject } from "react";
+
 export interface IFormDataInit {
   name?: string | undefined;
   age?: string | undefined;
@@ -22,4 +24,8 @@ export interface IFormData {
 
 export interface IErrorsObject {
   [key: string]: string[];
+}
+
+export interface IInputRefs {
+  [key: string]: RefObject<HTMLInputElement>;
 }

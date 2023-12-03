@@ -2,7 +2,12 @@ import { FormEvent, ReactElement, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
 import { ErrorMessage } from "../ErrorMessage";
-import { validationSchema, initErrors, parseFormData } from "../../utils";
+import {
+  validationSchema,
+  initErrors,
+  parseFormData,
+  checkInputsFilled,
+} from "../../utils";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { saveFormData, saveFileBase } from "../../store/form";
 import { IErrorsObject, IFormDataInit } from "../../types";
@@ -19,6 +24,7 @@ function UncontrolledForm(): ReactElement {
   const countriesList = useAppSelector((state) => state.countries);
 
   const [errors, setErrors] = useState<IErrorsObject>(initErrors);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const inputRef = {
     name: useRef<HTMLInputElement>(null),
@@ -86,6 +92,12 @@ function UncontrolledForm(): ReactElement {
     }
   }
 
+  function handleButtonDisabled(): void {
+    if (checkInputsFilled(inputRef)) {
+      setIsDisabled(false);
+    }
+  }
+
   return (
     <div className={styles.container}>
       <Link to="/" className={styles.nav__link}>
@@ -93,7 +105,7 @@ function UncontrolledForm(): ReactElement {
       </Link>
       <h1 className={styles.title}>Uncontrolled Form</h1>
 
-      <form className={styles.form} noValidate>
+      <form className={styles.form} onChange={handleButtonDisabled}>
         {/* Name */}
         <div className={styles.container__name}>
           <label htmlFor="name" className={styles.label}>
@@ -266,6 +278,7 @@ function UncontrolledForm(): ReactElement {
           name="Submit Form"
           className={styles.button__submit}
           onClick={handleSubmit}
+          disabled={isDisabled}
         />
       </form>
     </div>

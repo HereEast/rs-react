@@ -1,5 +1,16 @@
 import { IErrorsObject } from "../types";
 
+export const inputFields = [
+  "name",
+  "age",
+  "country",
+  "email",
+  "checkbox",
+  "password",
+  "passwordRepeat",
+  "file",
+];
+
 export const initErrors: IErrorsObject = {
   name: [],
   age: [],
